@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -13,7 +14,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         stage.setTitle("Hello!");
-        stage.setScene(Drawing.getScene());
+        stage.setScene(Drawing.generateScene());
         stage.show();
         stage.addEventHandler(KeyEvent.KEY_PRESSED, key -> {
             switch (key.getCode()){
@@ -41,6 +42,7 @@ public class Main extends Application {
                     break;
             }
         });
+        stage.addEventHandler(ScrollEvent.SCROLL, scroll -> Drawing.scroll(scroll.getDeltaY()));
     }
 
     public static void main(String[] args) {
