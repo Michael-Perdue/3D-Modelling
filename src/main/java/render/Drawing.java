@@ -5,10 +5,14 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.Group;
-import javafx.scene.PerspectiveCamera;
-import javafx.scene.Scene;
+import javafx.geometry.Pos;
+import javafx.scene.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
@@ -21,7 +25,7 @@ public class Drawing {
 
     private final static int height = 1000;
     private final static int width = 1000;
-    private static Scene scene;
+    private static SubScene scene;
     private final static Group group = new Group();
     private static RenderableObject selectedObject;
     private static ArrayList<RenderableObject> shapes = new ArrayList<RenderableObject>();
@@ -29,6 +33,7 @@ public class Drawing {
     private static double startX = 0, startY = 0, startAngleX = 0, startAngleY = 0;
     private static final DoubleProperty angleX = new SimpleDoubleProperty(0) , angleY = new SimpleDoubleProperty(0);
     private static boolean rightClick = false;
+    private static ToggleButton rotateButton,moveButton,selectButton;
 
     private static void setupCameraControl() {
         Rotate xAxisRotate = new Rotate(0, Rotate.X_AXIS);
@@ -70,7 +75,8 @@ public class Drawing {
         group.getChildren().add(sphere);
         sphere.setOnMouseClicked(clicked -> {
             selectedObject =sphere;
-            ConfigBox.generateBox();
+            if(selectButton.isSelected())
+                ConfigBox.generateBox();
         });
     }
 
@@ -82,22 +88,53 @@ public class Drawing {
         box.setOnMouseClicked(clicked -> {
             if(clicked.getButton() == MouseButton.PRIMARY) {
                 selectedObject = box;
-                ConfigBox.generateBox();
+                if(selectButton.isSelected())
+                    ConfigBox.generateBox();
             }
         });
+    }
+
+    public static VBox generateButtons(){
+        ButtonBar buttonBar = new ButtonBar();
+        rotateButton = new ToggleButton("Rotate");
+        rotateButton.setPrefSize(60,40);
+        moveButton = new ToggleButton("Move");
+        moveButton.setPrefSize(60,40);
+        selectButton = new ToggleButton("Select");
+        selectButton.setPrefSize(60,40);
+        ToggleGroup toggleGroup = new ToggleGroup();
+        rotateButton.setToggleGroup(toggleGroup);
+        moveButton.setToggleGroup(toggleGroup);
+        selectButton.setToggleGroup(toggleGroup);
+        ButtonBar.setButtonData(rotateButton, ButtonBar.ButtonData.APPLY);
+        ButtonBar.setButtonData(moveButton, ButtonBar.ButtonData.APPLY);
+        ButtonBar.setButtonData(selectButton, ButtonBar.ButtonData.APPLY);
+        buttonBar.getButtons().addAll(rotateButton,selectButton,moveButton);
+        VBox vBox = new VBox(buttonBar);
+        vBox.setStyle("-fx-background-color: GREY");
+        return vBox;
+    }
+
+    public static boolean rotateSelected(){
+        return rotateButton.isSelected();
     }
 
     public static Scene generateScene(){
         camera.setTranslateZ(-400);
         camera.setNearClip(1);
         camera.setFarClip(10000);
-        scene = new Scene(group,width,height,true);
+        createBox(70,70,40);
+        createBox(30,20,60);
+        scene = new SubScene(group,width,height,true, SceneAntialiasing.BALANCED);
         scene.setCamera(camera);
         scene.setFill(Color.GREY);
         setupCameraControl();
-        createBox(70,70,40);
-        createBox(30,20,60);
-        return scene;
+        VBox vBox = generateButtons();
+        vBox.getChildren().add(scene);
+        vBox.setAlignment(Pos.TOP_LEFT);
+        Scene mainScene = new Scene(vBox);
+        mainScene.setFill(Color.GREY);
+        return mainScene;
     }
 
     public static void scroll(double movement){

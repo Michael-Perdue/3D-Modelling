@@ -17,29 +17,31 @@ public class Main extends Application {
         stage.setScene(Drawing.generateScene());
         stage.show();
         stage.addEventHandler(KeyEvent.KEY_PRESSED, key -> {
-            switch (key.getCode()){
-                case RIGHT:
-                case D:
-                    Drawing.rotateX(10);
-                    break;
-                case LEFT:
-                case A:
-                    Drawing.rotateX(-10);
-                    break;
-                case UP:
-                case W:
-                    Drawing.rotateY(10);
-                    break;
-                case DOWN:
-                case S:
-                    Drawing.rotateY(-10);
-                    break;
-                case E:
-                    Drawing.rotateZ(10);
-                    break;
-                case Q:
-                    Drawing.rotateZ(-10);
-                    break;
+            if(Drawing.rotateSelected()) {
+                switch (key.getCode()) {
+                    case RIGHT:
+                    case D:
+                        Drawing.rotateX(10);
+                        break;
+                    case LEFT:
+                    case A:
+                        Drawing.rotateX(-10);
+                        break;
+                    case UP:
+                    case W:
+                        Drawing.rotateY(10);
+                        break;
+                    case DOWN:
+                    case S:
+                        Drawing.rotateY(-10);
+                        break;
+                    case E:
+                        Drawing.rotateZ(10);
+                        break;
+                    case Q:
+                        Drawing.rotateZ(-10);
+                        break;
+                }
             }
         });
         stage.addEventHandler(ScrollEvent.SCROLL, scroll -> Drawing.scroll(scroll.getDeltaY()));
