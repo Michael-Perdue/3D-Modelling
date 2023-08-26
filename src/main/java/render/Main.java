@@ -19,53 +19,21 @@ public class Main extends Application {
         stage.addEventHandler(KeyEvent.KEY_PRESSED, key -> {
             if(Drawing.rotateSelected()) {
                 switch (key.getCode()) {
-                    case RIGHT:
-                    case D:
-                        Drawing.rotateX(10);
-                        break;
-                    case LEFT:
-                    case A:
-                        Drawing.rotateX(-10);
-                        break;
-                    case UP:
-                    case W:
-                        Drawing.rotateY(10);
-                        break;
-                    case DOWN:
-                    case S:
-                        Drawing.rotateY(-10);
-                        break;
-                    case E:
-                        Drawing.rotateZ(10);
-                        break;
-                    case Q:
-                        Drawing.rotateZ(-10);
-                        break;
+                    case RIGHT, D -> Drawing.rotateY(1);
+                    case LEFT, A -> Drawing.rotateY(-1);
+                    case UP, W -> Drawing.rotateX(1);
+                    case DOWN, S -> Drawing.rotateX(-1);
+                    case E -> Drawing.rotateZ(1);
+                    case Q -> Drawing.rotateZ(-1);
                 }
             } else if (Drawing.moveSelected()) {
                 switch (key.getCode()) {
-                    case RIGHT:
-                    case D:
-                        Drawing.setX(1);
-                        break;
-                    case LEFT:
-                    case A:
-                        Drawing.setX(-1);
-                        break;
-                    case UP:
-                    case W:
-                        Drawing.setY(1);
-                        break;
-                    case DOWN:
-                    case S:
-                        Drawing.setY(-1);
-                        break;
-                    case E:
-                        Drawing.setZ(1);
-                        break;
-                    case Q:
-                        Drawing.setZ(-1);
-                        break;
+                    case RIGHT, D -> Drawing.setX(1);
+                    case LEFT, A -> Drawing.setX(-1);
+                    case UP, W -> Drawing.setY(-1);
+                    case DOWN, S -> Drawing.setY(1);
+                    case E -> Drawing.setZ(1);
+                    case Q -> Drawing.setZ(-1);
                 }
             }
         });

@@ -97,19 +97,26 @@ public class Drawing {
     public static VBox generateButtons(){
         ButtonBar buttonBar = new ButtonBar();
         rotateButton = new ToggleButton("Rotate");
-        rotateButton.setPrefSize(60,40);
+        rotateButton.setPrefSize(80,20);
         moveButton = new ToggleButton("Move");
-        moveButton.setPrefSize(60,40);
+        moveButton.setPrefSize(80,20);
         selectButton = new ToggleButton("Select");
-        selectButton.setPrefSize(60,40);
+        selectButton.setPrefSize(80,20);
         ToggleGroup toggleGroup = new ToggleGroup();
         rotateButton.setToggleGroup(toggleGroup);
         moveButton.setToggleGroup(toggleGroup);
         selectButton.setToggleGroup(toggleGroup);
+        Button resetCameraButton = new Button("Reset Camera");
+        resetCameraButton.setOnAction(clicked ->{
+            angleX.set(0);
+            angleY.set(0);
+        });
+        resetCameraButton.setPrefSize(110,20);
         ButtonBar.setButtonData(rotateButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(moveButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(selectButton, ButtonBar.ButtonData.APPLY);
-        buttonBar.getButtons().addAll(rotateButton,selectButton,moveButton);
+        ButtonBar.setButtonData(resetCameraButton, ButtonBar.ButtonData.APPLY);
+        buttonBar.getButtons().addAll(rotateButton,selectButton,moveButton,resetCameraButton);
         VBox vBox = new VBox(buttonBar);
         vBox.setStyle("-fx-background-color: GREY");
         return vBox;
