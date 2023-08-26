@@ -24,15 +24,20 @@ public class Drawing {
     private final static int height = 1000;
     private final static int width = 1000;
     private final static Group group = new Group();
+    private static RenderableObject selectedObject;
     private static ArrayList<RenderableObject> shapes = new ArrayList<RenderableObject>();
     private static PerspectiveCamera camera = new PerspectiveCamera(false);
 
     public static void createSphere(){
-        Sphere3D sphere= new Sphere3D(200);
+        Sphere3D sphere= new Sphere3D(20);
         shapes.add(sphere);
         group.getChildren().add(sphere);
         sphere.translateYProperty().set(height/2);
         sphere.translateXProperty().set(width/2);
+        sphere.setOnMouseClicked(clicked -> {
+            selectedObject =sphere;
+            ConfigBox.generateBox();
+        });
     }
 
     public static void createBox(){
@@ -41,6 +46,10 @@ public class Drawing {
         group.getChildren().add(box);
         box.translateYProperty().set(height/2);
         box.translateXProperty().set(height/2);
+        box.setOnMouseClicked(clicked -> {
+            selectedObject = box;
+            ConfigBox.generateBox();
+        });
     }
 
     public static Scene getScene(){
@@ -55,21 +64,18 @@ public class Drawing {
     }
 
     public static void rotateX(double angle){
-        shapes.forEach(shape -> {
-            shape.setRotationX(angle);
-        });
+        selectedObject.setRotationX(angle);
     }
 
     public static void rotateY(double angle){
-        shapes.forEach(shape -> {
-            shape.setRotationY(angle);
-        });
+        selectedObject.setRotationY(angle);
     }
 
     public static void rotateZ(double angle){
-        shapes.forEach(shape -> {
-            shape.setRotationZ(angle);
-        });
+        selectedObject.setRotationZ(angle);
     }
 
+    public static RenderableObject getSelectedObject() {
+        return selectedObject;
+    }
 }
