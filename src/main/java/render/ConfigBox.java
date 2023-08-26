@@ -15,7 +15,6 @@ import java.io.File;
 
 public class ConfigBox {
     public static void generateBox(){
-        // Creates a VBox to hold all the configuration settings
         VBox vBox = new VBox( 4);
         vBox.setPadding(new Insets(5, 5, 5, 5));
         vBox.setAlignment(Pos.CENTER_LEFT);
@@ -23,7 +22,6 @@ public class ConfigBox {
         vBox.setPrefWidth(200);
         Label label = new Label("Edit Rotation");
         vBox.getChildren().add(label);
-        // Creates 3 tile panes which each contains a label and text field for setting the x/y axis and the title of the chart
         TilePane xaxisPane = new TilePane();
         TilePane yaxisPane = new TilePane();
         TilePane zaxisPane = new TilePane();
@@ -39,11 +37,9 @@ public class ConfigBox {
         yaxisPane.getChildren().add(yaxisLabel);
         zaxisPane.getChildren().add(ztextField);
         zaxisPane.getChildren().add(zaxisLabel);
-        // Adds the 3 tile panes to the config vBox
         vBox.getChildren().add(xaxisPane);
         vBox.getChildren().add(yaxisPane);
         vBox.getChildren().add(zaxisPane);
-        // Creates and adds to the config vBox a button that upon clicking saves the chart to a png
         Button button = new Button("Rotate");
         button.setOnAction(click -> {
             Drawing.rotateY(Double.parseDouble(ytextField.getText()));
