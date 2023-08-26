@@ -42,6 +42,31 @@ public class Main extends Application {
                         Drawing.rotateZ(-10);
                         break;
                 }
+            } else if (Drawing.moveSelected()) {
+                switch (key.getCode()) {
+                    case RIGHT:
+                    case D:
+                        Drawing.setX(1);
+                        break;
+                    case LEFT:
+                    case A:
+                        Drawing.setX(-1);
+                        break;
+                    case UP:
+                    case W:
+                        Drawing.setY(1);
+                        break;
+                    case DOWN:
+                    case S:
+                        Drawing.setY(-1);
+                        break;
+                    case E:
+                        Drawing.setZ(1);
+                        break;
+                    case Q:
+                        Drawing.setZ(-1);
+                        break;
+                }
             }
         });
         stage.addEventHandler(ScrollEvent.SCROLL, scroll -> Drawing.scroll(scroll.getDeltaY()));

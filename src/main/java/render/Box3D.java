@@ -34,4 +34,16 @@ public class Box3D extends Box implements RenderableObject{
         rotation(rotate);
     }
 
+    public void setX(double offset){
+        this.setTranslateX(this.getTranslateX()+offset);
+    }
+
+    public void setY(double offset){
+        this.setTranslateY(this.getTranslateY()+offset);
+    }
+
+    public void setZ(double offset){
+        this.setTranslateZ(this.getTranslateZ()+offset);
+    }
+
 }

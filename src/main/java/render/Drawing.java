@@ -119,6 +119,10 @@ public class Drawing {
         return rotateButton.isSelected();
     }
 
+    public static boolean moveSelected(){
+        return moveButton.isSelected();
+    }
+
     public static Scene generateScene(){
         camera.setTranslateZ(-400);
         camera.setNearClip(1);
@@ -152,6 +156,19 @@ public class Drawing {
     public static void rotateZ(double angle){
         selectedObject.setRotationZ(angle);
     }
+
+    public static void setX(double offset){
+        selectedObject.setX(offset);
+    }
+
+    public static void setY(double offset){
+        selectedObject.setY(offset);
+    }
+
+    public static void setZ(double offset){
+        selectedObject.setZ(offset);
+    }
+
 
     public static RenderableObject getSelectedObject() {
         return selectedObject;

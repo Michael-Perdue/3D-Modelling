@@ -34,4 +34,16 @@ public class Sphere3D extends Sphere implements RenderableObject{
         rotation(rotate);
     }
 
+    public void setX(double offset){
+        this.setTranslateX(offset);
+    }
+
+    public void setY(double offset){
+        this.setTranslateY(offset);
+    }
+
+    public void setZ(double offset){
+        this.setTranslateZ(offset);
+    }
+
 }
