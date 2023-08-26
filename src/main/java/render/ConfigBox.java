@@ -42,9 +42,9 @@ public class ConfigBox {
         vBox.getChildren().add(zaxisPane);
         Button button = new Button("Rotate");
         button.setOnAction(click -> {
-            Drawing.rotateY(Double.parseDouble(ytextField.getText()));
-            Drawing.rotateZ(Double.parseDouble(ztextField.getText()));
-            Drawing.rotateX(Double.parseDouble(xtextField.getText()));
+            Drawing.getInstance().rotateY(Double.parseDouble(ytextField.getText()));
+            Drawing.getInstance().rotateZ(Double.parseDouble(ztextField.getText()));
+            Drawing.getInstance().rotateX(Double.parseDouble(xtextField.getText()));
         });
         vBox.getChildren().add(button);
         Scene scene = new Scene(vBox,200,300);

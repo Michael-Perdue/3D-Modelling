@@ -14,30 +14,31 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         stage.setTitle("Hello!");
-        stage.setScene(Drawing.generateScene());
+        Drawing drawing = Drawing.getInstance();
+        stage.setScene(drawing.generateScene());
         stage.show();
         stage.addEventHandler(KeyEvent.KEY_PRESSED, key -> {
-            if(Drawing.rotateSelected()) {
+            if(drawing.rotateSelected()) {
                 switch (key.getCode()) {
-                    case RIGHT, D -> Drawing.rotateY(1);
-                    case LEFT, A -> Drawing.rotateY(-1);
-                    case UP, W -> Drawing.rotateX(1);
-                    case DOWN, S -> Drawing.rotateX(-1);
-                    case E -> Drawing.rotateZ(1);
-                    case Q -> Drawing.rotateZ(-1);
+                    case RIGHT, D -> drawing.rotateY(1);
+                    case LEFT, A -> drawing.rotateY(-1);
+                    case UP, W -> drawing.rotateX(1);
+                    case DOWN, S -> drawing.rotateX(-1);
+                    case E -> drawing.rotateZ(1);
+                    case Q -> drawing.rotateZ(-1);
                 }
-            } else if (Drawing.moveSelected()) {
+            } else if (drawing.moveSelected()) {
                 switch (key.getCode()) {
-                    case RIGHT, D -> Drawing.setX(1);
-                    case LEFT, A -> Drawing.setX(-1);
-                    case UP, W -> Drawing.setY(-1);
-                    case DOWN, S -> Drawing.setY(1);
-                    case E -> Drawing.setZ(1);
-                    case Q -> Drawing.setZ(-1);
+                    case RIGHT, D -> drawing.setX(1);
+                    case LEFT, A -> drawing.setX(-1);
+                    case UP, W -> drawing.setY(-1);
+                    case DOWN, S -> drawing.setY(1);
+                    case E -> drawing.setZ(1);
+                    case Q -> drawing.setZ(-1);
                 }
             }
         });
-        stage.addEventHandler(ScrollEvent.SCROLL, scroll -> Drawing.scroll(scroll.getDeltaY()));
+        stage.addEventHandler(ScrollEvent.SCROLL, scroll -> drawing.scroll(scroll.getDeltaY()));
     }
 
     public static void main(String[] args) {

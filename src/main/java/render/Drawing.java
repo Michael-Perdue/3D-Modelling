@@ -11,9 +11,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
@@ -23,19 +25,30 @@ import java.util.ArrayList;
 
 public class Drawing {
 
-    private final static int height = 1000;
-    private final static int width = 1000;
-    private static SubScene scene;
-    private final static Group group = new Group();
-    private static RenderableObject selectedObject;
-    private static ArrayList<RenderableObject> shapes = new ArrayList<RenderableObject>();
-    private static PerspectiveCamera camera = new PerspectiveCamera(true);
-    private static double startX = 0, startY = 0, startAngleX = 0, startAngleY = 0;
-    private static final DoubleProperty angleX = new SimpleDoubleProperty(0) , angleY = new SimpleDoubleProperty(0);
-    private static boolean rightClick = false;
-    private static ToggleButton rotateButton,moveButton,selectButton;
+    private final int height = 1000;
+    private final int width = 1000;
+    private SubScene scene;
+    private final Group group = new Group();
+    private RenderableObject selectedObject;
+    private ArrayList<RenderableObject> shapes = new ArrayList<RenderableObject>();
+    private PerspectiveCamera camera = new PerspectiveCamera(true);
+    private double startX = 0, startY = 0, startAngleX = 0, startAngleY = 0;
+    private final DoubleProperty angleX = new SimpleDoubleProperty(0) , angleY = new SimpleDoubleProperty(0);
+    private boolean rightClick = false;
+    private ToggleButton rotateButton,moveButton,selectButton;
+    private static Drawing instance;
 
-    private static void setupCameraControl() {
+    public static Drawing getInstance(){
+        if(instance == null)
+            new Drawing();
+        return instance;
+    }
+
+    private Drawing(){
+        instance = this;
+    }
+
+    private void setupCameraControl() {
         Rotate xAxisRotate = new Rotate(0, Rotate.X_AXIS);
         Rotate yAxisRotate = new Rotate(0, Rotate.Y_AXIS);
         xAxisRotate.angleProperty().bind(angleX);
@@ -69,7 +82,7 @@ public class Drawing {
         });
     }
 
-    public static void createSphere(){
+    public void createSphere(){
         Sphere3D sphere= new Sphere3D(50);
         shapes.add(sphere);
         group.getChildren().add(sphere);
@@ -80,7 +93,7 @@ public class Drawing {
         });
     }
 
-    public static void createBox(double d,double h,double w){
+    public Box3D createBox(double d,double h,double w){
         Box3D box= new Box3D(d,h,w);
         shapes.add(box);
         group.getChildren().add(box);
@@ -92,9 +105,10 @@ public class Drawing {
                     ConfigBox.generateBox();
             }
         });
+        return box;
     }
 
-    public static VBox generateButtons(){
+    public VBox generateButtons(){
         ButtonBar buttonBar = new ButtonBar();
         rotateButton = new ToggleButton("Rotate");
         rotateButton.setPrefSize(80,20);
@@ -122,20 +136,22 @@ public class Drawing {
         return vBox;
     }
 
-    public static boolean rotateSelected(){
+    public boolean rotateSelected(){
         return rotateButton.isSelected();
     }
 
-    public static boolean moveSelected(){
+    public boolean moveSelected(){
         return moveButton.isSelected();
     }
 
-    public static Scene generateScene(){
+    public Scene generateScene(){
         camera.setTranslateZ(-400);
         camera.setNearClip(1);
         camera.setFarClip(10000);
-        createBox(70,70,40);
-        createBox(30,20,60);
+        Box3D box1 = createBox(70,70,40);
+        Box3D box2 = createBox(30,20,60);
+        PhongMaterial cobble = new PhongMaterial();
+        //cobble.setDiffuseMap(new Image(getClass().getResourceAsStream("cobble.png")));
         scene = new SubScene(group,width,height,true, SceneAntialiasing.BALANCED);
         scene.setCamera(camera);
         scene.setFill(Color.GREY);
@@ -148,36 +164,35 @@ public class Drawing {
         return mainScene;
     }
 
-    public static void scroll(double movement){
+    public void scroll(double movement){
         group.translateZProperty().set(group.getTranslateZ() + movement);
     }
 
-    public static void rotateX(double angle){
+    public void rotateX(double angle){
         selectedObject.setRotationX(angle);
     }
 
-    public static void rotateY(double angle){
+    public void rotateY(double angle){
         selectedObject.setRotationY(angle);
     }
 
-    public static void rotateZ(double angle){
+    public void rotateZ(double angle){
         selectedObject.setRotationZ(angle);
     }
 
-    public static void setX(double offset){
+    public void setX(double offset){
         selectedObject.setX(offset);
     }
 
-    public static void setY(double offset){
+    public void setY(double offset){
         selectedObject.setY(offset);
     }
 
-    public static void setZ(double offset){
+    public void setZ(double offset){
         selectedObject.setZ(offset);
     }
 
-
-    public static RenderableObject getSelectedObject() {
+    public RenderableObject getSelectedObject() {
         return selectedObject;
     }
 }
