@@ -3,6 +3,6 @@ module com.example.render {
     requires javafx.fxml;
 
 
-    opens render to javafx.fxml;
-    exports render;
+    opens modelling to javafx.fxml;
+    exports modelling;
 }

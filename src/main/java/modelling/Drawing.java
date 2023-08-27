@@ -1,8 +1,5 @@
-package render;
+package modelling;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Pos;
@@ -18,9 +15,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Transform;
-import javafx.scene.transform.Translate;
-import javafx.util.Duration;
 
 import java.util.ArrayList;
 
@@ -86,16 +80,16 @@ public class Drawing {
     public void createSphere(){
         Sphere3D sphere= new Sphere3D(50);
         shapes.add(sphere);
-        group.getChildren().add(sphere);
-        sphere.setOnMouseClicked(clicked -> {
+        group.getChildren().add(sphere.getShape3D());
+        sphere.getShape3D().setOnMouseClicked(clicked -> {
             if(!selectedObject.contains(sphere)) {
                 selectedObject.add(sphere);
                 if (selectButton.isSelected())
                     ConfigBox.generateBox();
-                ((PhongMaterial)sphere.getMaterial()).setSpecularColor(Color.AQUA);
+                ((PhongMaterial)sphere.getShape3D().getMaterial()).setSpecularColor(Color.AQUA);
             }else {
                 selectedObject.remove(sphere);
-                ((PhongMaterial)sphere.getMaterial()).setSpecularColor(null);
+                ((PhongMaterial)sphere.getShape3D().getMaterial()).setSpecularColor(null);
             }
         });
     }
@@ -103,14 +97,14 @@ public class Drawing {
     public Box3D createBox(double d,double h,double w){
         Box3D box= new Box3D(d,h,w);
         shapes.add(box);
-        group.getChildren().add(box);
-        box.setOnMouseClicked(clicked -> {
+        group.getChildren().add(box.getShape3D());
+        box.getShape3D().setOnMouseClicked(clicked -> {
             if(clicked.getButton() == MouseButton.PRIMARY) {
                 if(!selectedObject.contains(box)) {
                     selectedObject.add(box);
                     if (selectButton.isSelected())
                         ConfigBox.generateBox();
-                    Box outline = box.createOutline();
+                    Box outline = (Box)box.createOutline();
                     group.getChildren().add(outline);
                 }else{
                     selectedObject.remove(box);
@@ -170,8 +164,8 @@ public class Drawing {
         PhongMaterial test = new PhongMaterial();
         test.setDiffuseColor(Color.WHITE);
         test.setSpecularColor(Color.WHITE);
-        box1.setMaterial(cobble);
-        box2.setMaterial(test);
+        box1.getShape3D().setMaterial(cobble);
+        box2.getShape3D().setMaterial(test);
         scene = new SubScene(group,width,height,true, SceneAntialiasing.DISABLED);
         scene.setCamera(camera);
         scene.setFill(Color.GREY);
