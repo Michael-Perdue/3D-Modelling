@@ -9,17 +9,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Shape3D;
 import javafx.stage.Stage;
 
 import java.io.File;
 
 public class ConfigBox {
     public static void generateBox(){
-        VBox vBox = new VBox( 4);
+
+        VBox vBox = new VBox( 10);
         vBox.setPadding(new Insets(5, 5, 5, 5));
         vBox.setAlignment(Pos.CENTER_LEFT);
         vBox.setSpacing(10);
         vBox.setPrefWidth(200);
+
         Label label = new Label("Edit Rotation");
         vBox.getChildren().add(label);
         TilePane xaxisPane = new TilePane();
@@ -47,7 +50,37 @@ public class ConfigBox {
             Drawing.getInstance().rotateX(Double.parseDouble(xtextField.getText()));
         });
         vBox.getChildren().add(button);
-        Scene scene = new Scene(vBox,200,300);
+
+        Label labelM = new Label("Edit Location");
+        vBox.getChildren().add(labelM);
+        TilePane xaxisMPane = new TilePane();
+        TilePane yaxisMPane = new TilePane();
+        TilePane zaxisMPane = new TilePane();
+        Label xaxisMLabel = new Label("X Axis Position");
+        Label yaxisMLabel = new Label("Y Axis Position");
+        Label zaxisMLabel = new Label("Z Axis Position");
+        Shape3D model = Drawing.getInstance().getSelectedObject().getShape3D();
+        TextField xMtextField = new TextField(String.valueOf(model.getTranslateX()));
+        TextField yMtextField = new TextField(String.valueOf(model.getTranslateY()));
+        TextField zMtextField = new TextField(String.valueOf(model.getTranslateZ()));
+        xaxisMPane.getChildren().add(xMtextField);
+        xaxisMPane.getChildren().add(xaxisMLabel);
+        yaxisMPane.getChildren().add(yMtextField);
+        yaxisMPane.getChildren().add(yaxisMLabel);
+        zaxisMPane.getChildren().add(zMtextField);
+        zaxisMPane.getChildren().add(zaxisMLabel);
+        vBox.getChildren().add(xaxisMPane);
+        vBox.getChildren().add(yaxisMPane);
+        vBox.getChildren().add(zaxisMPane);
+        Button buttonMove = new Button("Move");
+        buttonMove.setOnAction(click -> {
+            model.setTranslateZ(Double.parseDouble(zMtextField.getText()));
+            model.setTranslateY(Double.parseDouble(yMtextField.getText()));
+            model.setTranslateX(Double.parseDouble(xMtextField.getText()));
+        });
+        vBox.getChildren().add(buttonMove);
+
+        Scene scene = new Scene(vBox,200,520);
         Stage stage = new Stage();
         stage.setTitle("Config shape");
         stage.setScene(scene);

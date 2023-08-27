@@ -3,6 +3,7 @@ package render;
 import javafx.geometry.Point3D;
 import javafx.scene.Node;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Shape3D;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 
@@ -46,4 +47,7 @@ public class Box3D extends Box implements RenderableObject{
         this.setTranslateZ(this.getTranslateZ()+offset);
     }
 
+    public Shape3D getShape3D(){
+        return this;
+    }
 }
