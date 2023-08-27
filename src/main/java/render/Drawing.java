@@ -16,6 +16,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
@@ -109,18 +110,12 @@ public class Drawing {
                     selectedObject.add(box);
                     if (selectButton.isSelected())
                         ConfigBox.generateBox();
-                    PhongMaterial material = (PhongMaterial) box.getMaterial();
-                    if(material.getDiffuseMap() == null)
-                        material.setDiffuseColor(Color.AQUA);
-                    else
-                        material.setSpecularColor(Color.AQUA);
+                    Box outline = box.createOutline();
+                    group.getChildren().add(outline);
                 }else{
                     selectedObject.remove(box);
-                    PhongMaterial material = (PhongMaterial) box.getMaterial();
-                    if(material.getDiffuseMap() == null)
-                        material.setDiffuseColor(Color.WHITE);
-                    else
-                        material.setSpecularColor(null);
+                    System.out.println(group.getChildren().remove(box.getOutline()));
+                    box.removeOutline();
                 }
             }
         });
