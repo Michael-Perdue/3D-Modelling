@@ -29,12 +29,12 @@ public class Main extends Application {
                 }
             } else if (drawing.moveSelected()) {
                 switch (key.getCode()) {
-                    case RIGHT, D -> drawing.setX(1);
-                    case LEFT, A -> drawing.setX(-1);
-                    case UP, W -> drawing.setY(-1);
-                    case DOWN, S -> drawing.setY(1);
-                    case E -> drawing.setZ(1);
-                    case Q -> drawing.setZ(-1);
+                    case RIGHT, D -> drawing.setX(1,true);
+                    case LEFT, A -> drawing.setX(-1,true);
+                    case UP, W -> drawing.setY(-1,true);
+                    case DOWN, S -> drawing.setY(1,true);
+                    case E -> drawing.setZ(1,true);
+                    case Q -> drawing.setZ(-1,true);
                 }
             }
         });

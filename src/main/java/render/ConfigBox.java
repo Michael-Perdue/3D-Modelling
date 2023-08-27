@@ -74,9 +74,9 @@ public class ConfigBox {
         vBox.getChildren().add(zaxisMPane);
         Button buttonMove = new Button("Move");
         buttonMove.setOnAction(click -> {
-            model.setTranslateZ(Double.parseDouble(zMtextField.getText()));
-            model.setTranslateY(Double.parseDouble(yMtextField.getText()));
-            model.setTranslateX(Double.parseDouble(xMtextField.getText()));
+            Drawing.getInstance().setZ(Double.parseDouble(zMtextField.getText()),false);
+            Drawing.getInstance().setY(Double.parseDouble(yMtextField.getText()),false);
+            Drawing.getInstance().setX(Double.parseDouble(xMtextField.getText()),false);
         });
         vBox.getChildren().add(buttonMove);
 

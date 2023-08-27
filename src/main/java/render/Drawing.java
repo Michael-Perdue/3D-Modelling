@@ -29,7 +29,7 @@ public class Drawing {
     private final int width = 1000;
     private SubScene scene;
     private final Group group = new Group();
-    private RenderableObject selectedObject;
+    private ArrayList<RenderableObject> selectedObject= new ArrayList<RenderableObject>();
     private ArrayList<RenderableObject> shapes = new ArrayList<RenderableObject>();
     private PerspectiveCamera camera = new PerspectiveCamera(true);
     private double startX = 0, startY = 0, startAngleX = 0, startAngleY = 0;
@@ -87,9 +87,15 @@ public class Drawing {
         shapes.add(sphere);
         group.getChildren().add(sphere);
         sphere.setOnMouseClicked(clicked -> {
-            selectedObject =sphere;
-            if(selectButton.isSelected())
-                ConfigBox.generateBox();
+            if(!selectedObject.contains(sphere)) {
+                selectedObject.add(sphere);
+                if (selectButton.isSelected())
+                    ConfigBox.generateBox();
+                ((PhongMaterial)sphere.getMaterial()).setSpecularColor(Color.AQUA);
+            }else {
+                selectedObject.remove(sphere);
+                ((PhongMaterial)sphere.getMaterial()).setSpecularColor(null);
+            }
         });
     }
 
@@ -97,12 +103,25 @@ public class Drawing {
         Box3D box= new Box3D(d,h,w);
         shapes.add(box);
         group.getChildren().add(box);
-        selectedObject = box;
         box.setOnMouseClicked(clicked -> {
             if(clicked.getButton() == MouseButton.PRIMARY) {
-                selectedObject = box;
-                if(selectButton.isSelected())
-                    ConfigBox.generateBox();
+                if(!selectedObject.contains(box)) {
+                    selectedObject.add(box);
+                    if (selectButton.isSelected())
+                        ConfigBox.generateBox();
+                    PhongMaterial material = (PhongMaterial) box.getMaterial();
+                    if(material.getDiffuseMap() == null)
+                        material.setDiffuseColor(Color.AQUA);
+                    else
+                        material.setSpecularColor(Color.AQUA);
+                }else{
+                    selectedObject.remove(box);
+                    PhongMaterial material = (PhongMaterial) box.getMaterial();
+                    if(material.getDiffuseMap() == null)
+                        material.setDiffuseColor(Color.WHITE);
+                    else
+                        material.setSpecularColor(null);
+                }
             }
         });
         return box;
@@ -154,10 +173,10 @@ public class Drawing {
         cobble.setDiffuseMap(new Image(Drawing.class.getResourceAsStream("/cobble.png")));
         cobble.setBumpMap(new Image(Drawing.class.getResourceAsStream("/cobbleNormal.png")));
         PhongMaterial test = new PhongMaterial();
-        test.setDiffuseMap(new Image(Drawing.class.getResourceAsStream("/displace.png")));
-        test.setBumpMap(new Image(Drawing.class.getResourceAsStream("/normal.png")));
-        test.setSpecularMap(new Image(Drawing.class.getResourceAsStream("/specular.png")));
+        test.setDiffuseColor(Color.WHITE);
+        test.setSpecularColor(Color.WHITE);
         box1.setMaterial(cobble);
+        box2.setMaterial(test);
         scene = new SubScene(group,width,height,true, SceneAntialiasing.DISABLED);
         scene.setCamera(camera);
         scene.setFill(Color.GREY);
@@ -175,30 +194,30 @@ public class Drawing {
     }
 
     public void rotateX(double angle){
-        selectedObject.setRotationX(angle);
+        selectedObject.forEach(shape-> shape.setRotationX(angle));
     }
 
     public void rotateY(double angle){
-        selectedObject.setRotationY(angle);
+        selectedObject.forEach(shape-> shape.setRotationY(angle));
     }
 
     public void rotateZ(double angle){
-        selectedObject.setRotationZ(angle);
+        selectedObject.forEach(shape-> shape.setRotationZ(angle));
     }
 
-    public void setX(double offset){
-        selectedObject.setX(offset);
+    public void setX(double offset,boolean accumulative){
+        selectedObject.forEach(shape-> shape.setX(offset,accumulative));
     }
 
-    public void setY(double offset){
-        selectedObject.setY(offset);
+    public void setY(double offset,boolean accumulative){
+        selectedObject.forEach(shape-> shape.setY(offset,accumulative));
     }
 
-    public void setZ(double offset){
-        selectedObject.setZ(offset);
+    public void setZ(double offset, boolean accumulative){
+        selectedObject.forEach(shape-> shape.setZ(offset,accumulative));
     }
 
     public RenderableObject getSelectedObject() {
-        return selectedObject;
+        return selectedObject.get(0);
     }
 }
