@@ -85,13 +85,21 @@ public class Drawing {
             if(!selectedObject.contains(sphere)) {
                 selectedObject.add(sphere);
                 if (selectButton.isSelected())
-                    ConfigBox.generateBox();
+                    new ConfigBox().generateBox();
                 ((PhongMaterial)sphere.getShape3D().getMaterial()).setSpecularColor(Color.AQUA);
             }else {
                 selectedObject.remove(sphere);
                 ((PhongMaterial)sphere.getShape3D().getMaterial()).setSpecularColor(null);
             }
         });
+    }
+
+    public Box3D createBox(double d,double h,double w,double x,double y, double z){
+        Box3D box = createBox(d,h,w);
+        box.setX(x,false);
+        box.setY(y,false);
+        box.setZ(z,false);
+        return box;
     }
 
     public Box3D createBox(double d,double h,double w){
@@ -103,7 +111,7 @@ public class Drawing {
                 if(!selectedObject.contains(box)) {
                     selectedObject.add(box);
                     if (selectButton.isSelected())
-                        ConfigBox.generateBox();
+                        new ConfigBox().generateBox();
                     Box outline = (Box)box.createOutline();
                     group.getChildren().add(outline);
                 }else{
@@ -124,21 +132,26 @@ public class Drawing {
         moveButton.setPrefSize(80,20);
         selectButton = new ToggleButton("Select");
         selectButton.setPrefSize(80,20);
+        ToggleButton squareButton = new ToggleButton("Add Square");
+        squareButton.setPrefSize(100,20);
         ToggleGroup toggleGroup = new ToggleGroup();
         rotateButton.setToggleGroup(toggleGroup);
         moveButton.setToggleGroup(toggleGroup);
         selectButton.setToggleGroup(toggleGroup);
+        squareButton.setToggleGroup(toggleGroup);
+        squareButton.setOnAction(clicked ->new ConfigBox().generateSquareBox());
         Button resetCameraButton = new Button("Reset Camera");
         resetCameraButton.setOnAction(clicked ->{
             angleX.set(0);
             angleY.set(0);
         });
         resetCameraButton.setPrefSize(110,20);
+        ButtonBar.setButtonData(squareButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(rotateButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(moveButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(selectButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(resetCameraButton, ButtonBar.ButtonData.APPLY);
-        buttonBar.getButtons().addAll(rotateButton,selectButton,moveButton,resetCameraButton);
+        buttonBar.getButtons().addAll(squareButton,rotateButton,selectButton,moveButton,resetCameraButton);
         VBox vBox = new VBox(buttonBar);
         vBox.setStyle("-fx-background-color: GREY");
         return vBox;
