@@ -228,15 +228,10 @@ public class Drawing {
         Box3D box1 = createBox(50,50,50);
         Box3D box2 = createBox(30,20,60,15,-35,-1);
         Box3D box3 = createBox(30,20,60,-18,-35,-1);
-        PhongMaterial cobble = new PhongMaterial();
-        cobble.setDiffuseMap(new Image(Drawing.class.getResourceAsStream("/cobble.png")));
-        cobble.setBumpMap(new Image(Drawing.class.getResourceAsStream("/cobbleNormal.png")));
-        PhongMaterial wood = new PhongMaterial();
-        wood.setDiffuseMap(new Image(Drawing.class.getResourceAsStream("/wood.jpg")));
-        wood.setBumpMap(new Image(Drawing.class.getResourceAsStream("/woodNormal.jpg")));
-        box1.getShape3D().setMaterial(cobble);
-        box2.getShape3D().setMaterial(wood);
-        box3.getShape3D().setMaterial(wood);
+
+        box1.getShape3D().setMaterial(Materials.getInstance().getCobble());
+        box2.getShape3D().setMaterial(Materials.getInstance().getWood());
+        box3.getShape3D().setMaterial(Materials.getInstance().getWood());
         scene = new SubScene(group,width,height,true, SceneAntialiasing.DISABLED);
         scene.setCamera(camera);
         scene.setFill(Color.GREY);
