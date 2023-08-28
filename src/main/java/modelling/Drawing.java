@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
@@ -79,20 +80,33 @@ public class Drawing {
         });
     }
 
-    public void createSphere(){
-        Sphere3D sphere= new Sphere3D(50);
+    public Sphere3D createSphere(double r,double x,double y, double z){
+        Sphere3D sphere = createSphere(r);
+        sphere.setX(x,false);
+        sphere.setY(y,false);
+        sphere.setZ(z,false);
+        return sphere;
+    }
+
+    public Sphere3D createSphere(double r){
+        Sphere3D sphere= new Sphere3D(r);
         group.getChildren().add(sphere.getShape3D());
         sphere.getShape3D().setOnMouseClicked(clicked -> {
-            if(!selectedObject.contains(sphere)) {
-                selectedObject.add(sphere);
-                if (selectButton.isSelected())
-                    new ConfigBox().generateBox();
-                ((PhongMaterial)sphere.getShape3D().getMaterial()).setSpecularColor(Color.AQUA);
-            }else {
-                selectedObject.remove(sphere);
-                ((PhongMaterial)sphere.getShape3D().getMaterial()).setSpecularColor(null);
+            if(clicked.getButton() == MouseButton.PRIMARY) {
+                if(!selectedObject.contains(sphere)) {
+                    selectedObject.add(sphere);
+                    if (selectButton.isSelected())
+                        new ConfigBox().generateBox();
+                    Sphere outline = (Sphere)sphere.createOutline();
+                    group.getChildren().add(outline);
+                }else{
+                    selectedObject.remove(sphere);
+                    group.getChildren().remove(sphere.getOutline());
+                    sphere.removeOutline();
+                }
             }
         });
+        return sphere;
     }
 
     public Box3D createBox(double d,double h,double w,double x,double y, double z){
@@ -159,6 +173,24 @@ public class Drawing {
                 Box outline = (Box)duplicate.createOutline();
                 group.getChildren().add(outline);
             }
+            if(shape.getType().equals("sphere")) {
+                Sphere current = (Sphere) shape.getShape3D();
+
+                Sphere3D duplicate = createSphere(
+                        current.getRadius(),
+                        current.getTranslateX()+1,
+                        current.getTranslateY(),
+                        current.getTranslateZ());
+                duplicate.applyTransform(shape.getCurrentTransfrom());
+                duplicate.getShape3D().setMaterial(current.getMaterial());
+
+                selectedObject.remove(shape);
+                group.getChildren().remove(shape.getOutline());
+                shape.removeOutline();
+                selectedObject.add(duplicate);
+                Sphere outline = (Sphere)duplicate.createOutline();
+                group.getChildren().add(outline);
+            }
         });
     }
 
@@ -173,6 +205,9 @@ public class Drawing {
         ToggleButton squareButton = new ToggleButton("Add Square");
         squareButton.setPrefSize(100,20);
         squareButton.setOnAction(clicked ->new ConfigBox().generateSquareBox());
+        ToggleButton sphereButton = new ToggleButton("Add Sphere");
+        sphereButton.setPrefSize(100,20);
+        sphereButton.setOnAction(clicked ->new ConfigBox().generateSphereBox());
         ToggleButton deleteButton = new ToggleButton("Delete Selected");
         deleteButton.setPrefSize(110,20);
         deleteButton.setOnAction(clicked ->deleteSelected());
@@ -187,6 +222,7 @@ public class Drawing {
         squareButton.setToggleGroup(toggleGroup);
         deleteButton.setToggleGroup(toggleGroup);
         duplicateButton.setToggleGroup(toggleGroup);
+        sphereButton.setToggleGroup(toggleGroup);
 
         Button resetCameraButton = new Button("Reset Camera");
         resetCameraButton.setOnAction(clicked ->{
@@ -196,13 +232,14 @@ public class Drawing {
         resetCameraButton.setPrefSize(110,20);
 
         ButtonBar.setButtonData(squareButton, ButtonBar.ButtonData.APPLY);
+        ButtonBar.setButtonData(sphereButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(rotateButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(moveButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(selectButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(deleteButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(duplicateButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(resetCameraButton, ButtonBar.ButtonData.APPLY);
-        buttonBar.getButtons().addAll(squareButton,duplicateButton,deleteButton,rotateButton,selectButton,moveButton,resetCameraButton);
+        buttonBar.getButtons().addAll(sphereButton,squareButton,duplicateButton,deleteButton,rotateButton,selectButton,moveButton,resetCameraButton);
 
         HBox emptyPadding = new HBox();
         emptyPadding.setPrefWidth(7);

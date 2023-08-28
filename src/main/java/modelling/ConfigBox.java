@@ -10,11 +10,12 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Shape3D;
+import javafx.scene.shape.Sphere;
 import javafx.stage.Stage;
 
 public class ConfigBox {
 
-    private TextField depthTextField, heightTextField,widthTextField;
+    private TextField radiusTextField, depthTextField, heightTextField,widthTextField;
     private TextField xMtextField, yMtextField,zMtextField;
 
     private void addRotation(VBox vBox, boolean button){
@@ -96,15 +97,15 @@ public class ConfigBox {
         Label depthLabel = new Label("Depth");
         Label heightLabel = new Label("Height");
         Label widthLabel = new Label("Width");
-        Shape3D model;
+        Box model;
         try{
-            model = Drawing.getInstance().getSelectedObject().getShape3D();
+            model = (Box) Drawing.getInstance().getSelectedObject().getShape3D();
         }catch (Exception e){
             model = new Box(0,0,0);
         }
-        depthTextField = new TextField(String.valueOf(model.getTranslateX()));
-        heightTextField = new TextField(String.valueOf(model.getTranslateY()));
-        widthTextField  = new TextField(String.valueOf(model.getTranslateZ()));
+        depthTextField = new TextField(String.valueOf(model.getDepth()));
+        heightTextField = new TextField(String.valueOf(model.getHeight()));
+        widthTextField  = new TextField(String.valueOf(model.getWidth()));
         depthPane.getChildren().add(depthTextField);
         depthPane.getChildren().add(depthLabel);
         heightPane.getChildren().add(heightTextField);
@@ -115,13 +116,35 @@ public class ConfigBox {
         vBox.getChildren().add(heightPane);
         vBox.getChildren().add(widthPane);
         if(button) {
-            Button buttonMove = new Button("Change Dimensions");
-            buttonMove.setOnAction(click -> {
-                Drawing.getInstance().setZ(Double.parseDouble(widthTextField.getText()), false);
-                Drawing.getInstance().setY(Double.parseDouble(heightTextField.getText()), false);
-                Drawing.getInstance().setX(Double.parseDouble(depthTextField.getText()), false);
+            Button buttonDimension = new Button("Change Dimensions");
+            buttonDimension.setOnAction(click -> {
+                //set dimensions of selected object
             });
-            vBox.getChildren().add(buttonMove);
+            vBox.getChildren().add(buttonDimension);
+        }
+    }
+
+    private void addSphereDimensions(VBox vBox,boolean button) {
+        Label labelM = new Label("Set Dimensions");
+        vBox.getChildren().add(labelM);
+        TilePane radiusPane = new TilePane();
+        Label radiusLabel = new Label("Radius");
+        Sphere model;
+        try {
+            model = (Sphere) Drawing.getInstance().getSelectedObject().getShape3D();
+        } catch (Exception e) {
+            model = new Sphere(0);
+        }
+        radiusTextField = new TextField(String.valueOf(model.getRadius()));
+        radiusPane.getChildren().add(radiusTextField);
+        radiusPane.getChildren().add(radiusLabel);
+        vBox.getChildren().add(radiusPane);
+        if (button) {
+            Button buttonDimension = new Button("Change Dimension");
+            buttonDimension.setOnAction(click -> {
+                //set dimension of selected objects
+            });
+            vBox.getChildren().add(buttonDimension);
         }
     }
 
@@ -137,9 +160,35 @@ public class ConfigBox {
         Stage stage = new Stage();
         buttonCreate.setOnAction(click -> {
             Drawing.getInstance().createBox(
-                    Double.parseDouble(depthTextField.getText()),
-                    Double.parseDouble(heightTextField.getText()),
                     Double.parseDouble(widthTextField.getText()),
+                    Double.parseDouble(heightTextField.getText()),
+                    Double.parseDouble(depthTextField.getText()),
+                    Double.parseDouble(xMtextField.getText()),
+                    Double.parseDouble(yMtextField.getText()),
+                    Double.parseDouble(zMtextField.getText()));
+            stage.close();
+        });
+        vBox.getChildren().add(buttonCreate);
+        Scene scene = new Scene(vBox,370,400);
+        scene.getStylesheets().add(ConfigBox.class.getResource("/main.css").toExternalForm());
+        stage.setTitle("Create shape");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void generateSphereBox(){
+        VBox vBox = new VBox( 10);
+        vBox.setPadding(new Insets(5, 5, 5, 5));
+        vBox.setAlignment(Pos.CENTER_LEFT);
+        vBox.setSpacing(10);
+        vBox.setPrefWidth(200);
+        addSphereDimensions(vBox,false);
+        addLocation(vBox,false);
+        Button buttonCreate = new Button("Create Sphere");
+        Stage stage = new Stage();
+        buttonCreate.setOnAction(click -> {
+            Drawing.getInstance().createSphere(
+                    Double.parseDouble(radiusTextField.getText()),
                     Double.parseDouble(xMtextField.getText()),
                     Double.parseDouble(yMtextField.getText()),
                     Double.parseDouble(zMtextField.getText()));
@@ -170,4 +219,6 @@ public class ConfigBox {
         stage.setScene(scene);
         stage.show();
     }
+
+
 }

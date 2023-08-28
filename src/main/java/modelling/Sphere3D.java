@@ -19,7 +19,7 @@ public class Sphere3D extends RenderableObject{
 
     public Shape3D createOutline(){
         Sphere sphere = (Sphere)this.shape;
-        Sphere outlineShape = new Sphere(sphere.getRadius());
+        Sphere outlineShape = new Sphere(sphere.getRadius()+1);
         outlineShape.setTranslateZ(sphere.getTranslateZ());
         outlineShape.setTranslateX(sphere.getTranslateX());
         outlineShape.setTranslateY(sphere.getTranslateY());
