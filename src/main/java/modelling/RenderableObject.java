@@ -1,5 +1,6 @@
 package modelling;
 
+import javafx.scene.PointLight;
 import javafx.scene.shape.Shape3D;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
@@ -8,8 +9,8 @@ public abstract class RenderableObject {
     protected Transform currentTransfrom = new Rotate();
     protected Shape3D shape;
     protected Shape3D outline;
+    protected PointLight pointLight;
     protected String type;
-    public double x =0, y=0, z=0;
 
     private void rotation(Rotate rotate){
         currentTransfrom = currentTransfrom.createConcatenation(rotate);
@@ -19,22 +20,23 @@ public abstract class RenderableObject {
             outline.getTransforms().clear();
             outline.getTransforms().add(currentTransfrom);
         }
+        if (pointLight != null) {
+            pointLight.getTransforms().clear();
+            pointLight.getTransforms().add(currentTransfrom);
+        }
     }
 
     public void setRotationX(double angle){
-        x +=angle;
         Rotate rotate = new Rotate(angle, Rotate.X_AXIS);
         rotation(rotate);
     }
 
     public void setRotationY(double angle){
-        y+=angle;
         Rotate rotate = new Rotate(angle, Rotate.Y_AXIS);
         rotation(rotate);
     }
 
     public void setRotationZ(double angle){
-        z+=angle;
         Rotate rotate = new Rotate(angle, Rotate.Z_AXIS);
         rotation(rotate);
     }
@@ -44,11 +46,15 @@ public abstract class RenderableObject {
             shape.setTranslateX(shape.getTranslateX() + offset);
             if (outline != null)
                 outline.setTranslateX(outline.getTranslateX() + offset);
+            if (pointLight != null)
+                pointLight.setTranslateX(pointLight.getTranslateX() + offset);
         }
         else {
             shape.setTranslateX(offset);
             if (outline != null)
                 outline.setTranslateX(offset);
+            if (pointLight != null)
+                pointLight.setTranslateX(offset);
         }
     }
 
@@ -57,11 +63,15 @@ public abstract class RenderableObject {
             shape.setTranslateY(shape.getTranslateY() + offset);
             if (outline != null)
                 outline.setTranslateY(outline.getTranslateY() + offset);
+            if (pointLight != null)
+                pointLight.setTranslateY(pointLight.getTranslateY() + offset);
         }
         else {
             shape.setTranslateY(offset);
             if (outline != null)
                 outline.setTranslateY(offset);
+            if (pointLight != null)
+                pointLight.setTranslateY(pointLight.getTranslateY());
         }
     }
 
@@ -70,11 +80,15 @@ public abstract class RenderableObject {
             shape.setTranslateZ(shape.getTranslateZ() + offset);
             if (outline != null)
                 outline.setTranslateZ(outline.getTranslateZ() + offset);
+            if (pointLight != null)
+                pointLight.setTranslateZ(pointLight.getTranslateZ() + offset);
         }
         else {
             shape.setTranslateZ(offset);
             if (outline != null)
                 outline.setTranslateZ(offset);
+            if (pointLight != null)
+                pointLight.setTranslateZ(pointLight.getTranslateZ());
         }
     }
 
@@ -104,6 +118,5 @@ public abstract class RenderableObject {
         shape.getTransforms().clear();
         currentTransfrom = transform;
         shape.getTransforms().add(currentTransfrom);
-
     }
 }

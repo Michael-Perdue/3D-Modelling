@@ -1,5 +1,7 @@
 package modelling;
 
+import javafx.scene.PointLight;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -32,6 +34,19 @@ public class Sphere3D extends RenderableObject{
         outlineShape.setMouseTransparent(true);
         this.outline = outlineShape;
         return this.outline;
+    }
+
+    public PointLight createPointLight(){
+        Sphere sphere = (Sphere)this.shape;
+        this.pointLight = new PointLight();
+        pointLight.setTranslateZ(sphere.getTranslateZ());
+        pointLight.setTranslateX(sphere.getTranslateX());
+        pointLight.setTranslateY(sphere.getTranslateY());
+        pointLight.getTransforms().add(currentTransfrom);
+        pointLight.setColor(Color.rgb(255,255,255,0.2));
+        pointLight.setPickOnBounds(false);
+        pointLight.setMouseTransparent(true);
+        return pointLight;
     }
 
 }

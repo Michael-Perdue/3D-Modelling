@@ -10,15 +10,15 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 
 import java.util.ArrayList;
 
@@ -212,7 +212,7 @@ public class Drawing {
         deleteButton.setPrefSize(110,20);
         deleteButton.setOnAction(clicked ->deleteSelected());
         ToggleButton duplicateButton = new ToggleButton("Duplicate Selected");
-        duplicateButton.setPrefSize(120,20);
+        duplicateButton.setPrefSize(145,20);
         duplicateButton.setOnAction(clicked ->duplicateSelected());
 
         ToggleGroup toggleGroup = new ToggleGroup();
@@ -265,7 +265,6 @@ public class Drawing {
         Box3D box1 = createBox(50,50,50);
         Box3D box2 = createBox(30,20,60,15,-35,-1);
         Box3D box3 = createBox(30,20,60,-18,-35,-1);
-
         box1.getShape3D().setMaterial(Materials.getInstance().getCobble());
         box2.getShape3D().setMaterial(Materials.getInstance().getWood());
         box3.getShape3D().setMaterial(Materials.getInstance().getWood());
@@ -276,7 +275,10 @@ public class Drawing {
         VBox vBox = generateButtons();
         vBox.getChildren().add(scene);
         vBox.setAlignment(Pos.TOP_LEFT);
-        Scene mainScene = new Scene(vBox);
+        Sphere3D sphere = createSphere(5,38,-17,-77);
+        group.getChildren().add(sphere.createPointLight());
+        group.getChildren().add(new AmbientLight(Color.rgb(192,192,192,0.01)));
+        Scene mainScene = new Scene(vBox,1000,1000);
         mainScene.setFill(Color.GREY);
         return mainScene;
     }

@@ -23,6 +23,7 @@ public class Box3D extends RenderableObject {
         PhongMaterial outlineMaterial = new PhongMaterial();
         outlineMaterial.setDiffuseColor(new Color(0.0, 0.0, 1.0, 0.1)); // Translucent blue (R, G, B, Opacity)
         outlineMaterial.setSpecularColor(new Color(0.0, 0.0, 1.0, 0.1)); // Translucent blue (R, G, B, Opacity)
+        outlineMaterial.setSelfIlluminationMap(null);
         outlineShape.setMaterial(outlineMaterial);
         outlineShape.setPickOnBounds(false);
         outlineShape.setMouseTransparent(true);
