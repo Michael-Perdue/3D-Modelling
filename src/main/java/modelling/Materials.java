@@ -42,4 +42,12 @@ public class Materials {
         materials.put(name,material);
     }
 
+    public Material getMaterial(String name){
+        return materials.get(name);
+    }
+
+    public HashMap<String, Material> getAllMaterials(){
+        return materials;
+    }
+
 }

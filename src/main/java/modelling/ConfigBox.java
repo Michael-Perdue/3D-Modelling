@@ -3,9 +3,7 @@ package modelling;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Box;
@@ -16,6 +14,7 @@ import javafx.stage.Stage;
 public class ConfigBox {
 
     private TextField radiusTextField, depthTextField, heightTextField,widthTextField;
+    private String material;
     private TextField xMtextField, yMtextField,zMtextField;
 
     private void addRotation(VBox vBox, boolean button){
@@ -148,6 +147,23 @@ public class ConfigBox {
         }
     }
 
+    public void addMaterials(VBox vBox,boolean button){
+        Label materialLabel = new Label("Set Material");
+        vBox.getChildren().add(materialLabel);
+        ToggleGroup toggleGroup = new ToggleGroup();
+        Materials.getInstance().getAllMaterials().forEach((name, material) -> {
+            RadioButton radioButton = new RadioButton(name);
+            radioButton.setToggleGroup(toggleGroup);
+            vBox.getChildren().add(radioButton);
+            if(button){
+                radioButton.setOnAction(clicked->Drawing.getInstance().setMaterial(name));
+            }else {
+                radioButton.setOnAction(clicked->this.material = name);
+            }
+        });
+    }
+
+
     public void generateSquareBox(){
         VBox vBox = new VBox( 10);
         vBox.setPadding(new Insets(5, 5, 5, 5));
@@ -156,20 +172,22 @@ public class ConfigBox {
         vBox.setPrefWidth(200);
         addBoxDimensions(vBox,false);
         addLocation(vBox,false);
+        addMaterials(vBox,false);
         Button buttonCreate = new Button("Create Box");
         Stage stage = new Stage();
         buttonCreate.setOnAction(click -> {
-            Drawing.getInstance().createBox(
+            Box3D box = Drawing.getInstance().createBox(
                     Double.parseDouble(widthTextField.getText()),
                     Double.parseDouble(heightTextField.getText()),
                     Double.parseDouble(depthTextField.getText()),
                     Double.parseDouble(xMtextField.getText()),
                     Double.parseDouble(yMtextField.getText()),
                     Double.parseDouble(zMtextField.getText()));
+            box.getShape3D().setMaterial(Materials.getInstance().getMaterial(material));
             stage.close();
         });
         vBox.getChildren().add(buttonCreate);
-        Scene scene = new Scene(vBox,370,400);
+        Scene scene = new Scene(vBox,370,500);
         scene.getStylesheets().add(ConfigBox.class.getResource("/main.css").toExternalForm());
         stage.setTitle("Create shape");
         stage.setScene(scene);
@@ -184,18 +202,20 @@ public class ConfigBox {
         vBox.setPrefWidth(200);
         addSphereDimensions(vBox,false);
         addLocation(vBox,false);
+        addMaterials(vBox,false);
         Button buttonCreate = new Button("Create Sphere");
         Stage stage = new Stage();
         buttonCreate.setOnAction(click -> {
-            Drawing.getInstance().createSphere(
+            Sphere3D sphere = Drawing.getInstance().createSphere(
                     Double.parseDouble(radiusTextField.getText()),
                     Double.parseDouble(xMtextField.getText()),
                     Double.parseDouble(yMtextField.getText()),
                     Double.parseDouble(zMtextField.getText()));
+            sphere.getShape3D().setMaterial(Materials.getInstance().getMaterial(material));
             stage.close();
         });
         vBox.getChildren().add(buttonCreate);
-        Scene scene = new Scene(vBox,370,400);
+        Scene scene = new Scene(vBox,370,350);
         scene.getStylesheets().add(ConfigBox.class.getResource("/main.css").toExternalForm());
         stage.setTitle("Create shape");
         stage.setScene(scene);
@@ -211,8 +231,8 @@ public class ConfigBox {
         vBox.setPrefWidth(200);
         addRotation(vBox,true);
         addLocation(vBox,true);
-
-        Scene scene = new Scene(vBox,370,400);
+        addMaterials(vBox,true);
+        Scene scene = new Scene(vBox,370,600);
         scene.getStylesheets().add(ConfigBox.class.getResource("/main.css").toExternalForm());
         Stage stage = new Stage();
         stage.setTitle("Config shape");

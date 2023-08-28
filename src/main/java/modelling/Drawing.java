@@ -212,7 +212,7 @@ public class Drawing {
         deleteButton.setPrefSize(110,20);
         deleteButton.setOnAction(clicked ->deleteSelected());
         ToggleButton duplicateButton = new ToggleButton("Duplicate Selected");
-        duplicateButton.setPrefSize(110,20);
+        duplicateButton.setPrefSize(120,20);
         duplicateButton.setOnAction(clicked ->duplicateSelected());
 
         ToggleGroup toggleGroup = new ToggleGroup();
@@ -307,6 +307,10 @@ public class Drawing {
 
     public void setZ(double offset, boolean accumulative){
         selectedObject.forEach(shape-> shape.setZ(offset,accumulative));
+    }
+
+    public void setMaterial(String name){
+        selectedObject.forEach(shape-> shape.getShape3D().setMaterial(Materials.getInstance().getMaterial(name)));
     }
 
     public RenderableObject getSelectedObject() {
