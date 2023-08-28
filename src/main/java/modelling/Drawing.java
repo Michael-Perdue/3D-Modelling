@@ -25,7 +25,6 @@ public class Drawing {
     private SubScene scene;
     private final Group group = new Group();
     private ArrayList<RenderableObject> selectedObject= new ArrayList<RenderableObject>();
-    private ArrayList<RenderableObject> shapes = new ArrayList<RenderableObject>();
     private PerspectiveCamera camera = new PerspectiveCamera(true);
     private double startX = 0, startY = 0, startAngleX = 0, startAngleY = 0;
     private final DoubleProperty angleX = new SimpleDoubleProperty(0) , angleY = new SimpleDoubleProperty(0);
@@ -79,7 +78,6 @@ public class Drawing {
 
     public void createSphere(){
         Sphere3D sphere= new Sphere3D(50);
-        shapes.add(sphere);
         group.getChildren().add(sphere.getShape3D());
         sphere.getShape3D().setOnMouseClicked(clicked -> {
             if(!selectedObject.contains(sphere)) {
@@ -104,7 +102,6 @@ public class Drawing {
 
     public Box3D createBox(double d,double h,double w){
         Box3D box= new Box3D(d,h,w);
-        shapes.add(box);
         group.getChildren().add(box.getShape3D());
         box.getShape3D().setOnMouseClicked(clicked -> {
             if(clicked.getButton() == MouseButton.PRIMARY) {
@@ -116,12 +113,23 @@ public class Drawing {
                     group.getChildren().add(outline);
                 }else{
                     selectedObject.remove(box);
-                    System.out.println(group.getChildren().remove(box.getOutline()));
+                    group.getChildren().remove(box.getOutline());
                     box.removeOutline();
                 }
             }
         });
         return box;
+    }
+
+    public void deleteSelected(){
+        // Must make a copy of the list to avoid concurrent modification errors!
+        ArrayList<RenderableObject> tempList = new ArrayList<>(selectedObject);
+        tempList.forEach(shape -> {
+            group.getChildren().remove(shape.getShape3D());
+            group.getChildren().remove(shape.getOutline());
+            shape.removeOutline();
+            selectedObject.remove(shape);
+        });
     }
 
     public VBox generateButtons(){
@@ -130,28 +138,36 @@ public class Drawing {
         rotateButton.setPrefSize(80,20);
         moveButton = new ToggleButton("Move");
         moveButton.setPrefSize(80,20);
-        selectButton = new ToggleButton("Select");
+        selectButton = new ToggleButton("Configure");
         selectButton.setPrefSize(80,20);
         ToggleButton squareButton = new ToggleButton("Add Square");
         squareButton.setPrefSize(100,20);
+        squareButton.setOnAction(clicked ->new ConfigBox().generateSquareBox());
+        ToggleButton deleteButton = new ToggleButton("Delete Selected");
+        deleteButton.setPrefSize(110,20);
+        deleteButton.setOnAction(clicked ->deleteSelected());
+
         ToggleGroup toggleGroup = new ToggleGroup();
         rotateButton.setToggleGroup(toggleGroup);
         moveButton.setToggleGroup(toggleGroup);
         selectButton.setToggleGroup(toggleGroup);
         squareButton.setToggleGroup(toggleGroup);
-        squareButton.setOnAction(clicked ->new ConfigBox().generateSquareBox());
+        deleteButton.setToggleGroup(toggleGroup);
+
         Button resetCameraButton = new Button("Reset Camera");
         resetCameraButton.setOnAction(clicked ->{
             angleX.set(0);
             angleY.set(0);
         });
         resetCameraButton.setPrefSize(110,20);
+
         ButtonBar.setButtonData(squareButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(rotateButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(moveButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(selectButton, ButtonBar.ButtonData.APPLY);
+        ButtonBar.setButtonData(deleteButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(resetCameraButton, ButtonBar.ButtonData.APPLY);
-        buttonBar.getButtons().addAll(squareButton,rotateButton,selectButton,moveButton,resetCameraButton);
+        buttonBar.getButtons().addAll(squareButton,deleteButton,rotateButton,selectButton,moveButton,resetCameraButton);
         VBox vBox = new VBox(buttonBar);
         vBox.setStyle("-fx-background-color: GREY");
         return vBox;
