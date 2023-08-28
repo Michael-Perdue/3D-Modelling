@@ -14,6 +14,7 @@ public class Sphere3D extends RenderableObject{
     public Sphere3D (double radius){
         super();
         this.shape = new Sphere(radius);
+        this.type = "sphere";
     }
 
     public Shape3D createOutline(){

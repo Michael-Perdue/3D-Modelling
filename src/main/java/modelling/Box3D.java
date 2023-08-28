@@ -7,10 +7,10 @@ import javafx.scene.shape.Shape3D;
 
 public class Box3D extends RenderableObject {
 
-
     public Box3D (double depth, double height, double width){
         super();
         this.shape = new Box(depth,height,width);
+        this.type = "box";
     }
 
     public Shape3D createOutline(){

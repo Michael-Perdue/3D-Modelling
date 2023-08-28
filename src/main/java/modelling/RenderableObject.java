@@ -8,7 +8,8 @@ public abstract class RenderableObject {
     protected Transform currentTransfrom = new Rotate();
     protected Shape3D shape;
     protected Shape3D outline;
-
+    protected String type;
+    public double x =0, y=0, z=0;
 
     private void rotation(Rotate rotate){
         currentTransfrom = currentTransfrom.createConcatenation(rotate);
@@ -21,16 +22,19 @@ public abstract class RenderableObject {
     }
 
     public void setRotationX(double angle){
+        x +=angle;
         Rotate rotate = new Rotate(angle, Rotate.X_AXIS);
         rotation(rotate);
     }
 
     public void setRotationY(double angle){
+        y+=angle;
         Rotate rotate = new Rotate(angle, Rotate.Y_AXIS);
         rotation(rotate);
     }
 
     public void setRotationZ(double angle){
+        z+=angle;
         Rotate rotate = new Rotate(angle, Rotate.Z_AXIS);
         rotation(rotate);
     }
@@ -88,4 +92,18 @@ public abstract class RenderableObject {
         return shape;
     }
 
+    public String getType(){
+        return type;
+    }
+
+    public Transform getCurrentTransfrom(){
+        return currentTransfrom;
+    }
+
+    public void applyTransform(Transform transform){
+        shape.getTransforms().clear();
+        currentTransfrom = transform;
+        shape.getTransforms().add(currentTransfrom);
+
+    }
 }

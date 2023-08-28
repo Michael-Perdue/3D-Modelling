@@ -135,6 +135,33 @@ public class Drawing {
         });
     }
 
+    public void duplicateSelected(){
+        // Must make a copy of the list to avoid concurrent modification errors!
+        ArrayList<RenderableObject> tempList = new ArrayList<>(selectedObject);
+        tempList.forEach(shape -> {
+            if(shape.getType().equals("box")) {
+                Box current = (Box)shape.getShape3D();
+
+                Box3D duplicate = createBox(
+                        current.getWidth(),
+                        current.getHeight(),
+                        current.getDepth(),
+                        current.getTranslateX()+1,
+                        current.getTranslateY(),
+                        current.getTranslateZ());
+                duplicate.applyTransform(shape.getCurrentTransfrom());
+                duplicate.getShape3D().setMaterial(current.getMaterial());
+
+                selectedObject.remove(shape);
+                group.getChildren().remove(shape.getOutline());
+                shape.removeOutline();
+                selectedObject.add(duplicate);
+                Box outline = (Box)duplicate.createOutline();
+                group.getChildren().add(outline);
+            }
+        });
+    }
+
     public VBox generateButtons(){
         ButtonBar buttonBar = new ButtonBar();
         rotateButton = new ToggleButton("Rotate");
@@ -149,6 +176,9 @@ public class Drawing {
         ToggleButton deleteButton = new ToggleButton("Delete Selected");
         deleteButton.setPrefSize(110,20);
         deleteButton.setOnAction(clicked ->deleteSelected());
+        ToggleButton duplicateButton = new ToggleButton("Duplicate Selected");
+        duplicateButton.setPrefSize(110,20);
+        duplicateButton.setOnAction(clicked ->duplicateSelected());
 
         ToggleGroup toggleGroup = new ToggleGroup();
         rotateButton.setToggleGroup(toggleGroup);
@@ -156,6 +186,7 @@ public class Drawing {
         selectButton.setToggleGroup(toggleGroup);
         squareButton.setToggleGroup(toggleGroup);
         deleteButton.setToggleGroup(toggleGroup);
+        duplicateButton.setToggleGroup(toggleGroup);
 
         Button resetCameraButton = new Button("Reset Camera");
         resetCameraButton.setOnAction(clicked ->{
@@ -169,8 +200,9 @@ public class Drawing {
         ButtonBar.setButtonData(moveButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(selectButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(deleteButton, ButtonBar.ButtonData.APPLY);
+        ButtonBar.setButtonData(duplicateButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(resetCameraButton, ButtonBar.ButtonData.APPLY);
-        buttonBar.getButtons().addAll(squareButton,deleteButton,rotateButton,selectButton,moveButton,resetCameraButton);
+        buttonBar.getButtons().addAll(squareButton,duplicateButton,deleteButton,rotateButton,selectButton,moveButton,resetCameraButton);
 
         HBox emptyPadding = new HBox();
         emptyPadding.setPrefWidth(7);
