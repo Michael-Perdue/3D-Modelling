@@ -46,6 +46,11 @@ public class Sphere3D extends RenderableObject{
         pointLight.setColor(Color.rgb(255,255,255,0.2));
         pointLight.setPickOnBounds(false);
         pointLight.setMouseTransparent(true);
+        PhongMaterial material = new PhongMaterial();
+        material.setDiffuseColor(new Color(0.0, 0.0, 0.0, 0.7));
+        material.setSpecularColor(new Color(0.0, 0.0, 0.0, 0.7));
+        material.setSelfIlluminationMap(null);
+        sphere.setMaterial(material);
         return pointLight;
     }
 
