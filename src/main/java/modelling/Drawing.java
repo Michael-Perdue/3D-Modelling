@@ -2,6 +2,7 @@ package modelling;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.Button;
@@ -10,6 +11,8 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -168,7 +171,12 @@ public class Drawing {
         ButtonBar.setButtonData(deleteButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(resetCameraButton, ButtonBar.ButtonData.APPLY);
         buttonBar.getButtons().addAll(squareButton,deleteButton,rotateButton,selectButton,moveButton,resetCameraButton);
-        VBox vBox = new VBox(buttonBar);
+
+        HBox emptyPadding = new HBox();
+        emptyPadding.setPrefWidth(7);
+
+        VBox vBox = new VBox(emptyPadding,buttonBar);
+        vBox.setPadding(new Insets(7));
         vBox.setStyle("-fx-background-color: GREY");
         return vBox;
     }

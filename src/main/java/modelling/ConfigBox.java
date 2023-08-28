@@ -146,7 +146,8 @@ public class ConfigBox {
             stage.close();
         });
         vBox.getChildren().add(buttonCreate);
-        Scene scene = new Scene(vBox,200,520);
+        Scene scene = new Scene(vBox,370,400);
+        scene.getStylesheets().add(ConfigBox.class.getResource("/main.css").toExternalForm());
         stage.setTitle("Create shape");
         stage.setScene(scene);
         stage.show();
@@ -162,7 +163,8 @@ public class ConfigBox {
         addRotation(vBox,true);
         addLocation(vBox,true);
 
-        Scene scene = new Scene(vBox,200,520);
+        Scene scene = new Scene(vBox,370,400);
+        scene.getStylesheets().add(ConfigBox.class.getResource("/main.css").toExternalForm());
         Stage stage = new Stage();
         stage.setTitle("Config shape");
         stage.setScene(scene);

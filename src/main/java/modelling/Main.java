@@ -1,6 +1,7 @@
 package modelling;
 
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.stage.Stage;
@@ -11,7 +12,9 @@ public class Main extends Application {
     public void start(Stage stage){
         stage.setTitle("Hello!");
         Drawing drawing = Drawing.getInstance();
-        stage.setScene(drawing.generateScene());
+        Scene scene = drawing.generateScene();
+        scene.getStylesheets().add(Main.class.getResource("/main.css").toExternalForm());
+        stage.setScene(scene);
         stage.show();
         stage.addEventHandler(KeyEvent.KEY_PRESSED, key -> {
             if(drawing.rotateSelected()) {

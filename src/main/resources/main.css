@@ -1,0 +1,37 @@
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+.text-field {
+    -fx-font-size: 14px;
+    -fx-padding: 5px;
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5px;
+}
+
+.button{
+    -fx-background-color: 	#A9A9A9, #D3D3D3;
+    -fx-background-radius: 8,7,6;
+    -fx-background-insets: 0,1,2;
+    -fx-padding: 8;
+}
+.toggle-button {
+    -fx-background-color: 	#A9A9A9, #D3D3D3;
+    -fx-background-radius: 8,7,6;
+    -fx-background-insets: 0,1,2;
+    -fx-padding: 8;
+}
+
+.toggle-button:selected {
+    -fx-background-color: #4CAF50, #A5D6A7;
+}
+
+.button:hover {
+    -fx-background-color: #4CAF50, #A5D6A7;
+}
+
+.toggle-button:hover {
+    -fx-background-color: #4CAF50, #A5D6A7;
+}
