@@ -119,4 +119,12 @@ public abstract class RenderableObject {
         currentTransfrom = transform;
         shape.getTransforms().add(currentTransfrom);
     }
+
+    public void hideShape(){
+        shape.setVisible(false);
+    }
+
+    public void showShape(){
+        shape.setVisible(true);
+    }
 }

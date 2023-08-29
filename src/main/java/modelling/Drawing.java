@@ -32,8 +32,9 @@ public class Drawing {
     private PerspectiveCamera camera = new PerspectiveCamera(true);
     private double startX = 0, startY = 0, startAngleX = 0, startAngleY = 0;
     private final DoubleProperty angleX = new SimpleDoubleProperty(0) , angleY = new SimpleDoubleProperty(0);
-    private boolean rightClick = false;
+    private boolean rightClick = false, on = true;
     private ToggleButton rotateButton,moveButton,selectButton;
+    private ArrayList<RenderableObject> lights = new ArrayList<>();
     private static Drawing instance;
 
     public static Drawing getInstance(){
@@ -197,24 +198,23 @@ public class Drawing {
     public VBox generateButtons(){
         ButtonBar buttonBar = new ButtonBar();
         rotateButton = new ToggleButton("Rotate");
-        rotateButton.setPrefSize(80,20);
+        rotateButton.setMaxWidth(50);
         moveButton = new ToggleButton("Move");
-        moveButton.setPrefSize(80,20);
+        moveButton.setMaxWidth(50);
         selectButton = new ToggleButton("Configure");
-        selectButton.setPrefSize(80,20);
+        selectButton.setMaxWidth(50);
         ToggleButton squareButton = new ToggleButton("Add Square");
-        squareButton.setPrefSize(100,20);
+        squareButton.setMaxWidth(50);
         squareButton.setOnAction(clicked ->new ConfigBox().generateSquareBox());
         ToggleButton sphereButton = new ToggleButton("Add Sphere");
-        sphereButton.setPrefSize(100,20);
+        sphereButton.setMaxWidth(50);
         sphereButton.setOnAction(clicked ->new ConfigBox().generateSphereBox());
-        ToggleButton deleteButton = new ToggleButton("Delete Selected");
-        deleteButton.setPrefSize(110,20);
+        ToggleButton deleteButton = new ToggleButton("Delete");
+        deleteButton.setMaxWidth(50);
         deleteButton.setOnAction(clicked ->deleteSelected());
-        ToggleButton duplicateButton = new ToggleButton("Duplicate Selected");
-        duplicateButton.setPrefSize(145,20);
+        ToggleButton duplicateButton = new ToggleButton("Duplicate");
+        duplicateButton.setMaxWidth(50);
         duplicateButton.setOnAction(clicked ->duplicateSelected());
-
         ToggleGroup toggleGroup = new ToggleGroup();
         rotateButton.setToggleGroup(toggleGroup);
         moveButton.setToggleGroup(toggleGroup);
@@ -229,7 +229,29 @@ public class Drawing {
             angleX.set(0);
             angleY.set(0);
         });
-        resetCameraButton.setPrefSize(110,20);
+        resetCameraButton.setMaxWidth(90);
+
+        Button hideLightButton = new Button("Hide Light");
+        hideLightButton.setOnAction(clicked ->{
+            if(on) {
+                lights.forEach(light -> {
+                    light.hideShape();
+                    group.getChildren().remove(light.getOutline());
+                    light.removeOutline();
+                    try {
+                        selectedObject.remove(light);
+                    }catch (Exception e){}
+                });
+                on = false;
+                hideLightButton.setText("Show Light");
+            }
+            else {
+                lights.forEach(light -> light.showShape());
+                on = true;
+                hideLightButton.setText("Hide Light");
+            }
+        });
+        hideLightButton.setMaxWidth(90);
 
         ButtonBar.setButtonData(squareButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(sphereButton, ButtonBar.ButtonData.APPLY);
@@ -239,7 +261,8 @@ public class Drawing {
         ButtonBar.setButtonData(deleteButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(duplicateButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(resetCameraButton, ButtonBar.ButtonData.APPLY);
-        buttonBar.getButtons().addAll(sphereButton,squareButton,duplicateButton,deleteButton,rotateButton,selectButton,moveButton,resetCameraButton);
+        ButtonBar.setButtonData(hideLightButton, ButtonBar.ButtonData.APPLY);
+        buttonBar.getButtons().addAll(sphereButton,squareButton,duplicateButton,deleteButton,rotateButton,selectButton,moveButton,hideLightButton,resetCameraButton);
 
         HBox emptyPadding = new HBox();
         emptyPadding.setPrefWidth(7);
@@ -277,6 +300,7 @@ public class Drawing {
         vBox.setAlignment(Pos.TOP_LEFT);
         Sphere3D sphere = createSphere(5,38,-17,-77);
         group.getChildren().add(sphere.createPointLight());
+        lights.add(sphere);
         group.getChildren().add(new AmbientLight(Color.rgb(192,192,192,0.01)));
         Scene mainScene = new Scene(vBox,1000,1000);
         mainScene.setFill(Color.GREY);

@@ -15,12 +15,14 @@
     -fx-background-color: 	#A9A9A9, #D3D3D3;
     -fx-background-radius: 8,7,6;
     -fx-background-insets: 0,1,2;
+    -fx-font-size: 10px;
     -fx-padding: 8;
 }
 .toggle-button {
     -fx-background-color: 	#A9A9A9, #D3D3D3;
     -fx-background-radius: 8,7,6;
     -fx-background-insets: 0,1,2;
+    -fx-font-size: 10px;
     -fx-padding: 8;
 }
 
