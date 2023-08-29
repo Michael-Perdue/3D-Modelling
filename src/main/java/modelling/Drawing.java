@@ -195,8 +195,11 @@ public class Drawing {
         });
     }
 
+    public void setFont(Node button){button.setStyle("-fx-font-size: 10px;");}
+
     public VBox generateButtons(){
         ButtonBar buttonBar = new ButtonBar();
+
         rotateButton = new ToggleButton("Rotate");
         rotateButton.setMaxWidth(50);
         moveButton = new ToggleButton("Move");
@@ -206,6 +209,7 @@ public class Drawing {
         ToggleButton squareButton = new ToggleButton("Add Square");
         squareButton.setMaxWidth(50);
         squareButton.setOnAction(clicked ->new ConfigBox().generateSquareBox());
+        squareButton.setStyle("-fx-font-size: 10px;");
         ToggleButton sphereButton = new ToggleButton("Add Sphere");
         sphereButton.setMaxWidth(50);
         sphereButton.setOnAction(clicked ->new ConfigBox().generateSphereBox());
@@ -215,6 +219,8 @@ public class Drawing {
         ToggleButton duplicateButton = new ToggleButton("Duplicate");
         duplicateButton.setMaxWidth(50);
         duplicateButton.setOnAction(clicked ->duplicateSelected());
+        duplicateButton.setStyle("-fx-font-size: 10px;");
+
         ToggleGroup toggleGroup = new ToggleGroup();
         rotateButton.setToggleGroup(toggleGroup);
         moveButton.setToggleGroup(toggleGroup);
@@ -263,6 +269,8 @@ public class Drawing {
         ButtonBar.setButtonData(resetCameraButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(hideLightButton, ButtonBar.ButtonData.APPLY);
         buttonBar.getButtons().addAll(sphereButton,squareButton,duplicateButton,deleteButton,rotateButton,selectButton,moveButton,hideLightButton,resetCameraButton);
+
+        buttonBar.getButtons().forEach(button ->setFont(button));
 
         HBox emptyPadding = new HBox();
         emptyPadding.setPrefWidth(7);
