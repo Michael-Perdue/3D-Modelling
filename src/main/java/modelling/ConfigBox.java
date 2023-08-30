@@ -13,10 +13,19 @@ import javafx.stage.Stage;
 
 public class ConfigBox {
 
+    // Stores dimensions of shape text fields to be able to get the value of them when a button is clicked
     private TextField radiusTextField, depthTextField, heightTextField,widthTextField;
+    // Stores the material the user has selected when configureing a model
     private String material;
+    // Stores the axis location text fields to be able to get the value of them when a button is clicked
     private TextField xMtextField, yMtextField,zMtextField;
 
+    /**
+     * Adds the option to set the rotation of the object being configured to the VBox,
+     * which is given to it through adding various text fields, labels and buttons.
+     * @param vBox the VBox you want to add rotation options to
+     * @param button flag for if you want a button added the vbox which updates the objects rotation on click
+     */
     private void addRotation(VBox vBox, boolean button){
         Label label = new Label("Edit Rotation");
         vBox.getChildren().add(label);
@@ -49,6 +58,12 @@ public class ConfigBox {
         }
     }
 
+    /**
+     * Adds the option to set the location of the object being configured to the VBox,
+     * which is given to it through adding various text fields, labels and buttons.
+     * @param vBox the VBox you want to add rotation options to
+     * @param button flag for if you want a button added the vbox which updates the objects location on click
+     */
     private void addLocation(VBox vBox, boolean button){
         Label labelM = new Label("Set Location");
         vBox.getChildren().add(labelM);
@@ -87,6 +102,12 @@ public class ConfigBox {
         }
     }
 
+    /**
+     * Adds the option to set the dimensions of the box object being configured to the VBox,
+     * which is given to it through adding various text fields, labels and buttons.
+     * @param vBox the VBox you want to add rotation options to
+     * @param button flag for if you want a button added the vbox which updates the boxes dimension on click
+     */
     private void addBoxDimensions(VBox vBox,boolean button){
         Label labelM = new Label("Set Dimensions");
         vBox.getChildren().add(labelM);
@@ -123,6 +144,12 @@ public class ConfigBox {
         }
     }
 
+    /**
+     * Adds the option to set the dimensions of the sphere object being configured to the VBox,
+     * which is given to it through adding various text fields, labels and buttons.
+     * @param vBox the VBox you want to add rotation options to
+     * @param button flag for if you want a button added the vbox which updates the spheres dimension on click
+     */
     private void addSphereDimensions(VBox vBox,boolean button) {
         Label labelM = new Label("Set Dimensions");
         vBox.getChildren().add(labelM);
@@ -147,6 +174,12 @@ public class ConfigBox {
         }
     }
 
+    /**
+     * Adds the option to set the material of the object being configured to the VBox,
+     * which is given to it through adding various text fields, labels and buttons.
+     * @param vBox the VBox you want to add rotation options to
+     * @param button flag for if you want the radio button on the vbox to instantly update the objects material on click
+     */
     public void addMaterials(VBox vBox,boolean button){
         Label materialLabel = new Label("Set Material");
         vBox.getChildren().add(materialLabel);
