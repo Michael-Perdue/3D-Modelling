@@ -19,6 +19,7 @@ public class ConfigBox {
     private String material;
     // Stores the axis location text fields to be able to get the value of them when a button is clicked
     private TextField xMtextField, yMtextField,zMtextField;
+    private Stage stage = new Stage();
 
     /**
      * Adds the option to set the rotation of the object being configured to the VBox,
@@ -138,7 +139,11 @@ public class ConfigBox {
         if(button) {
             Button buttonDimension = new Button("Change Dimensions");
             buttonDimension.setOnAction(click -> {
-                //set dimensions of selected object
+                Drawing.getInstance().setAllBoxDimensions(
+                        Double.parseDouble(widthTextField.getText()),
+                        Double.parseDouble(heightTextField.getText()),
+                        Double.parseDouble(depthTextField.getText()));
+                stage.close();
             });
             vBox.getChildren().add(buttonDimension);
         }
@@ -207,7 +212,6 @@ public class ConfigBox {
         addLocation(vBox,false);
         addMaterials(vBox,false);
         Button buttonCreate = new Button("Create Box");
-        Stage stage = new Stage();
         buttonCreate.setOnAction(click -> {
             Box3D box = Drawing.getInstance().createBox(
                     Double.parseDouble(widthTextField.getText()),
@@ -237,7 +241,6 @@ public class ConfigBox {
         addLocation(vBox,false);
         addMaterials(vBox,false);
         Button buttonCreate = new Button("Create Sphere");
-        Stage stage = new Stage();
         buttonCreate.setOnAction(click -> {
             Sphere3D sphere = Drawing.getInstance().createSphere(
                     Double.parseDouble(radiusTextField.getText()),
@@ -245,7 +248,6 @@ public class ConfigBox {
                     Double.parseDouble(yMtextField.getText()),
                     Double.parseDouble(zMtextField.getText()));
             sphere.getShape3D().setMaterial(Materials.getInstance().getMaterial(material));
-            stage.close();
         });
         vBox.getChildren().add(buttonCreate);
         Scene scene = new Scene(vBox,370,350);
@@ -256,7 +258,7 @@ public class ConfigBox {
     }
 
     public void generateBox(){
-
+        double vboxHeight = 600;
         VBox vBox = new VBox( 10);
         vBox.setPadding(new Insets(5, 5, 5, 5));
         vBox.setAlignment(Pos.CENTER_LEFT);
@@ -264,10 +266,13 @@ public class ConfigBox {
         vBox.setPrefWidth(200);
         addRotation(vBox,true);
         addLocation(vBox,true);
+        if(Drawing.getInstance().selectedType().equals("box")) {
+            addBoxDimensions(vBox, true);
+            vboxHeight += 100;
+        }
         addMaterials(vBox,true);
-        Scene scene = new Scene(vBox,370,600);
+        Scene scene = new Scene(vBox,370,vboxHeight);
         scene.getStylesheets().add(ConfigBox.class.getResource("/main.css").toExternalForm());
-        Stage stage = new Stage();
         stage.setTitle("Config shape");
         stage.setScene(scene);
         stage.show();

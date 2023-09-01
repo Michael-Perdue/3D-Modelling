@@ -343,11 +343,39 @@ public class Drawing {
         selectedObject.forEach(shape-> shape.setZ(offset,accumulative));
     }
 
+    public void setAllBoxDimensions(double depth,double height,double width){
+        ArrayList<RenderableObject> tempList = new ArrayList<>(selectedObject);
+        tempList.forEach(shape-> {
+            try {
+                Box3D box = (Box3D) shape;
+                box.setAllDimensions(depth,height,width);
+            }catch (Exception e){e.printStackTrace();}
+        });
+    }
+
+    public String selectedType(){
+        return selectedObject.get(0).getType();
+    }
+
     public void setMaterial(String name){
         selectedObject.forEach(shape-> shape.getShape3D().setMaterial(Materials.getInstance().getMaterial(name)));
     }
 
     public RenderableObject getSelectedObject() {
         return selectedObject.get(0);
+    }
+
+    public void removeObject(RenderableObject object){
+        selectedObject.remove(object);
+        group.getChildren().remove(object.shape);
+        group.getChildren().remove(object.outline);
+        group.getChildren().remove(object.pointLight);
+    }
+
+    public void addObject(RenderableObject object){
+        selectedObject.remove(object);
+        group.getChildren().remove(object.shape);
+        group.getChildren().remove(object.outline);
+        group.getChildren().remove(object.pointLight);
     }
 }
