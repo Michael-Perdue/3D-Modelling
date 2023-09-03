@@ -2,6 +2,7 @@ package modelling;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.PointLight;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.TilePane;
@@ -16,9 +17,10 @@ public class ConfigBox {
     // Stores dimensions of shape text fields to be able to get the value of them when a button is clicked
     private TextField radiusTextField, depthTextField, heightTextField,widthTextField;
     // Stores the material the user has selected when configureing a model
-    private String material;
+    private String material = "";
     // Stores the axis location text fields to be able to get the value of them when a button is clicked
     private TextField xMtextField, yMtextField,zMtextField;
+    private RadioButton lightEnabledButton;
     private Stage stage = new Stage();
 
     /**
@@ -51,9 +53,9 @@ public class ConfigBox {
         if(button) {
             Button buttonRotate = new Button("Rotate");
             buttonRotate.setOnAction(click -> {
-                Drawing.getInstance().rotateY(Double.parseDouble(ytextField.getText()));
-                Drawing.getInstance().rotateZ(Double.parseDouble(ztextField.getText()));
-                Drawing.getInstance().rotateX(Double.parseDouble(xtextField.getText()));
+                DrawingGUI.getInstance().rotateY(Double.parseDouble(ytextField.getText()));
+                DrawingGUI.getInstance().rotateZ(Double.parseDouble(ztextField.getText()));
+                DrawingGUI.getInstance().rotateX(Double.parseDouble(xtextField.getText()));
             });
             vBox.getChildren().add(buttonRotate);
         }
@@ -76,7 +78,7 @@ public class ConfigBox {
         Label zaxisMLabel = new Label("Z Axis Position");
         Shape3D model;
         try{
-            model = Drawing.getInstance().getSelectedObject().getShape3D();
+            model = DrawingGUI.getInstance().getSelectedObject().getShape3D();
         }catch (Exception e){
             model = new Box(0,0,0);
         }
@@ -95,9 +97,9 @@ public class ConfigBox {
         if(button) {
             Button buttonMove = new Button("Move");
             buttonMove.setOnAction(click -> {
-                Drawing.getInstance().setZ(Double.parseDouble(zMtextField.getText()), false);
-                Drawing.getInstance().setY(Double.parseDouble(yMtextField.getText()), false);
-                Drawing.getInstance().setX(Double.parseDouble(xMtextField.getText()), false);
+                DrawingGUI.getInstance().setZ(Double.parseDouble(zMtextField.getText()), false);
+                DrawingGUI.getInstance().setY(Double.parseDouble(yMtextField.getText()), false);
+                DrawingGUI.getInstance().setX(Double.parseDouble(xMtextField.getText()), false);
             });
             vBox.getChildren().add(buttonMove);
         }
@@ -120,7 +122,7 @@ public class ConfigBox {
         Label widthLabel = new Label("Width");
         Box model;
         try{
-            model = (Box) Drawing.getInstance().getSelectedObject().getShape3D();
+            model = (Box) DrawingGUI.getInstance().getSelectedObject().getShape3D();
         }catch (Exception e){
             model = new Box(0,0,0);
         }
@@ -139,7 +141,7 @@ public class ConfigBox {
         if(button) {
             Button buttonDimension = new Button("Change Dimensions");
             buttonDimension.setOnAction(click -> {
-                Drawing.getInstance().setAllBoxDimensions(
+                DrawingGUI.getInstance().setAllBoxDimensions(
                         Double.parseDouble(widthTextField.getText()),
                         Double.parseDouble(heightTextField.getText()),
                         Double.parseDouble(depthTextField.getText()));
@@ -162,7 +164,7 @@ public class ConfigBox {
         Label radiusLabel = new Label("Radius");
         Sphere model;
         try {
-            model = (Sphere) Drawing.getInstance().getSelectedObject().getShape3D();
+            model = (Sphere) DrawingGUI.getInstance().getSelectedObject().getShape3D();
         } catch (Exception e) {
             model = new Sphere(0);
         }
@@ -173,10 +175,41 @@ public class ConfigBox {
         if (button) {
             Button buttonDimension = new Button("Change Dimension");
             buttonDimension.setOnAction(click -> {
-                Drawing.getInstance().setSphereDimensions(Double.parseDouble(radiusTextField.getText()));
+                DrawingGUI.getInstance().setSphereDimensions(Double.parseDouble(radiusTextField.getText()));
                 stage.close();
             });
             vBox.getChildren().add(buttonDimension);
+        }
+    }
+
+    private void addLight(VBox vBox,boolean button) {
+        Label labelLight = new Label("Enable/Disable LightBox");
+        vBox.getChildren().add(labelLight);
+        VBox lightVBox = new VBox();
+        lightVBox.setSpacing(10);
+        lightEnabledButton = new RadioButton("Enable");
+        RadioButton lightDisabledButton = new RadioButton("Disable");
+        ToggleGroup toggleGroup = new ToggleGroup();
+        lightEnabledButton.setToggleGroup(toggleGroup);
+        lightDisabledButton.setToggleGroup(toggleGroup);
+        lightVBox.getChildren().add(lightEnabledButton);
+        lightVBox.getChildren().add(lightDisabledButton);
+        vBox.getChildren().add(lightVBox);
+        if (button) {
+            RenderableObject renderableObject = DrawingGUI.getInstance().getSelectedObject();
+            PointLight light = renderableObject.getPointLight();
+            if (light == null)
+                toggleGroup.selectToggle(lightDisabledButton);
+            else
+                toggleGroup.selectToggle(lightEnabledButton);
+            lightEnabledButton.setOnAction(clicked -> {
+                    DrawingGUI.getInstance().addLight(renderableObject);
+            });
+            lightDisabledButton.setOnAction(clicked ->{
+                DrawingGUI.getInstance().removeLight(renderableObject);
+            });
+        }else {
+            toggleGroup.selectToggle(lightDisabledButton);
         }
     }
 
@@ -190,12 +223,16 @@ public class ConfigBox {
         Label materialLabel = new Label("Set Material");
         vBox.getChildren().add(materialLabel);
         ToggleGroup toggleGroup = new ToggleGroup();
+        RadioButton radioButtonNone = new RadioButton("None");
+        radioButtonNone.setToggleGroup(toggleGroup);
+        toggleGroup.selectToggle(radioButtonNone);
+        vBox.getChildren().add(radioButtonNone);
         Materials.getInstance().getAllMaterials().forEach((name, material) -> {
             RadioButton radioButton = new RadioButton(name);
             radioButton.setToggleGroup(toggleGroup);
             vBox.getChildren().add(radioButton);
             if(button){
-                radioButton.setOnAction(clicked->Drawing.getInstance().setMaterial(name));
+                radioButton.setOnAction(clicked-> DrawingGUI.getInstance().setMaterial(name));
             }else {
                 radioButton.setOnAction(clicked->this.material = name);
             }
@@ -212,20 +249,24 @@ public class ConfigBox {
         addBoxDimensions(vBox,false);
         addLocation(vBox,false);
         addMaterials(vBox,false);
+        addLight(vBox,false);
         Button buttonCreate = new Button("Create Box");
         buttonCreate.setOnAction(click -> {
-            Box3D box = Drawing.getInstance().createBox(
+            Box3D box = DrawingGUI.getInstance().createBox(
                     Double.parseDouble(widthTextField.getText()),
                     Double.parseDouble(heightTextField.getText()),
                     Double.parseDouble(depthTextField.getText()),
                     Double.parseDouble(xMtextField.getText()),
                     Double.parseDouble(yMtextField.getText()),
                     Double.parseDouble(zMtextField.getText()));
-            box.getShape3D().setMaterial(Materials.getInstance().getMaterial(material));
+            if(!material.equals("None"))
+                box.getShape3D().setMaterial(Materials.getInstance().getMaterial(material));
+            if(lightEnabledButton.isSelected())
+                DrawingGUI.getInstance().addLight(box);
             stage.close();
         });
         vBox.getChildren().add(buttonCreate);
-        Scene scene = new Scene(vBox,370,500);
+        Scene scene = new Scene(vBox,370,580);
         scene.getStylesheets().add(ConfigBox.class.getResource("/main.css").toExternalForm());
         stage.setTitle("Create shape");
         stage.setScene(scene);
@@ -241,17 +282,21 @@ public class ConfigBox {
         addSphereDimensions(vBox,false);
         addLocation(vBox,false);
         addMaterials(vBox,false);
+        addLight(vBox,false);
         Button buttonCreate = new Button("Create Sphere");
         buttonCreate.setOnAction(click -> {
-            Sphere3D sphere = Drawing.getInstance().createSphere(
+            Sphere3D sphere = DrawingGUI.getInstance().createSphere(
                     Double.parseDouble(radiusTextField.getText()),
                     Double.parseDouble(xMtextField.getText()),
                     Double.parseDouble(yMtextField.getText()),
                     Double.parseDouble(zMtextField.getText()));
-            sphere.getShape3D().setMaterial(Materials.getInstance().getMaterial(material));
+            if(!material.equals("None"))
+                sphere.getShape3D().setMaterial(Materials.getInstance().getMaterial(material));
+            if(lightEnabledButton.isSelected())
+                DrawingGUI.getInstance().addLight(sphere);
         });
         vBox.getChildren().add(buttonCreate);
-        Scene scene = new Scene(vBox,370,350);
+        Scene scene = new Scene(vBox,370,500);
         scene.getStylesheets().add(ConfigBox.class.getResource("/main.css").toExternalForm());
         stage.setTitle("Create shape");
         stage.setScene(scene);
@@ -259,7 +304,7 @@ public class ConfigBox {
     }
 
     public void generateBox(){
-        double vboxHeight = 600;
+        double vboxHeight = 660;
         VBox vBox = new VBox( 10);
         vBox.setPadding(new Insets(5, 5, 5, 5));
         vBox.setAlignment(Pos.CENTER_LEFT);
@@ -267,18 +312,19 @@ public class ConfigBox {
         vBox.setPrefWidth(200);
         addRotation(vBox,true);
         addLocation(vBox,true);
-        if(Drawing.getInstance().selectedType().equals("box")) {
+        if(DrawingGUI.getInstance().selectedType().equals("box")) {
             addBoxDimensions(vBox, true);
-            vboxHeight += 100;
+            vboxHeight += 180;
         }
-        if(Drawing.getInstance().selectedType().equals("sphere")) {
+        if(DrawingGUI.getInstance().selectedType().equals("sphere")) {
             addSphereDimensions(vBox, true);
-            vboxHeight += 30;
+            vboxHeight += 80;
         }
+        addLight(vBox,true);
         addMaterials(vBox,true);
         Scene scene = new Scene(vBox,370,vboxHeight);
         scene.getStylesheets().add(ConfigBox.class.getResource("/main.css").toExternalForm());
-        stage.setOnCloseRequest(close -> Drawing.getInstance().unselectAllObjects());
+        stage.setOnCloseRequest(close -> DrawingGUI.getInstance().toggleAllObjects());
         stage.setTitle("Config shape");
         stage.setScene(scene);
         stage.show();

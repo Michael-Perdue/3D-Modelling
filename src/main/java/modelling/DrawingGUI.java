@@ -9,42 +9,38 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Shape3D;
 import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Translate;
 
 import java.util.ArrayList;
 
-public class Drawing {
+public class DrawingGUI {
 
-    private final int height = 1000;
-    private final int width = 1000;
+    private final int height = 1000, width = 1000;
     private SubScene scene;
     private final Group group = new Group();
     private ArrayList<RenderableObject> selectedObject= new ArrayList<RenderableObject>();
     private PerspectiveCamera camera = new PerspectiveCamera(true);
     private double startX = 0, startY = 0, startAngleX = 0, startAngleY = 0;
     private final DoubleProperty angleX = new SimpleDoubleProperty(0) , angleY = new SimpleDoubleProperty(0);
-    private boolean rightClick = false, on = true;
-    private ToggleButton rotateButton,moveButton,selectButton;
-    private ArrayList<RenderableObject> lights = new ArrayList<>();
-    private static Drawing instance;
+    private boolean rightClick = false;
+    private LightManager lightManager = new LightManager();
+    private ToggleButton rotateButton,moveButton, selectButton;
+    private static DrawingGUI instance;
 
-    public static Drawing getInstance(){
+    public static DrawingGUI getInstance(){
         if(instance == null)
-            new Drawing();
+            new DrawingGUI();
         return instance;
     }
 
-    private Drawing(){
+    private DrawingGUI(){
         instance = this;
     }
 
@@ -82,6 +78,32 @@ public class Drawing {
         });
     }
 
+
+    public void renderableObjectClicked(RenderableObject object){
+        if (!selectedObject.contains(object)) {
+            selectedObject.add(object);
+            if (selectButton.isSelected())
+                new ConfigBox().generateBox();
+            Shape3D outline = object.createOutline();
+            group.getChildren().add(outline);
+        } else {
+            selectedObject.remove(object);
+            group.getChildren().remove(object.getOutline());
+            object.removeOutline();
+        }
+    }
+
+    public Sphere3D createSphere(double r){
+        Sphere3D sphere= new Sphere3D(r);
+        group.getChildren().add(sphere.getShape3D());
+        sphere.getShape3D().setOnMouseClicked(clicked -> {
+            if(clicked.getButton() == MouseButton.PRIMARY) {
+                renderableObjectClicked(sphere);
+            }
+        });
+        return sphere;
+    }
+
     public Sphere3D createSphere(double r,double x,double y, double z){
         Sphere3D sphere = createSphere(r);
         sphere.setX(x,false);
@@ -90,25 +112,15 @@ public class Drawing {
         return sphere;
     }
 
-    public Sphere3D createSphere(double r){
-        Sphere3D sphere= new Sphere3D(r);
-        group.getChildren().add(sphere.getShape3D());
-        sphere.getShape3D().setOnMouseClicked(clicked -> {
+    public Box3D createBox(double d,double h,double w){
+        Box3D box= new Box3D(d,h,w);
+        group.getChildren().add(box.getShape3D());
+        box.getShape3D().setOnMouseClicked(clicked -> {
             if(clicked.getButton() == MouseButton.PRIMARY) {
-                if(!selectedObject.contains(sphere)) {
-                    selectedObject.add(sphere);
-                    if (selectButton.isSelected())
-                        new ConfigBox().generateBox();
-                    Sphere outline = (Sphere)sphere.createOutline();
-                    group.getChildren().add(outline);
-                }else{
-                    selectedObject.remove(sphere);
-                    group.getChildren().remove(sphere.getOutline());
-                    sphere.removeOutline();
-                }
+                renderableObjectClicked(box);
             }
         });
-        return sphere;
+        return box;
     }
 
     public Box3D createBox(double d,double h,double w,double x,double y, double z){
@@ -119,33 +131,16 @@ public class Drawing {
         return box;
     }
 
-    public Box3D createBox(double d,double h,double w){
-        Box3D box= new Box3D(d,h,w);
-        group.getChildren().add(box.getShape3D());
-        box.getShape3D().setOnMouseClicked(clicked -> {
-            if(clicked.getButton() == MouseButton.PRIMARY) {
-                if(!selectedObject.contains(box)) {
-                    selectedObject.add(box);
-                    if (selectButton.isSelected())
-                        new ConfigBox().generateBox();
-                    Box outline = (Box)box.createOutline();
-                    group.getChildren().add(outline);
-                }else{
-                    selectedObject.remove(box);
-                    group.getChildren().remove(box.getOutline());
-                    box.removeOutline();
-                }
-            }
-        });
-        return box;
-    }
-
     public void deleteSelected(){
         // Must make a copy of the list to avoid concurrent modification errors!
         ArrayList<RenderableObject> tempList = new ArrayList<>(selectedObject);
         tempList.forEach(shape -> {
             group.getChildren().remove(shape.getShape3D());
             group.getChildren().remove(shape.getOutline());
+            if(shape.getPointLight() != null) {
+                group.getChildren().remove(shape.getPointLight());
+                lightManager.removeLight(shape);
+            }
             shape.removeOutline();
             selectedObject.remove(shape);
         });
@@ -155,9 +150,9 @@ public class Drawing {
         // Must make a copy of the list to avoid concurrent modification errors!
         ArrayList<RenderableObject> tempList = new ArrayList<>(selectedObject);
         tempList.forEach(shape -> {
+            renderableObjectClicked(shape);
             if(shape.getType().equals("box")) {
                 Box current = (Box)shape.getShape3D();
-
                 Box3D duplicate = createBox(
                         current.getWidth(),
                         current.getHeight(),
@@ -165,33 +160,18 @@ public class Drawing {
                         current.getTranslateX()+1,
                         current.getTranslateY(),
                         current.getTranslateZ());
-                duplicate.applyTransform(shape.getCurrentTransfrom());
-                duplicate.getShape3D().setMaterial(current.getMaterial());
-
-                selectedObject.remove(shape);
-                group.getChildren().remove(shape.getOutline());
-                shape.removeOutline();
-                selectedObject.add(duplicate);
-                Box outline = (Box)duplicate.createOutline();
-                group.getChildren().add(outline);
+                shape.deepCopyObject(duplicate,false);
+                renderableObjectClicked(duplicate);
             }
             if(shape.getType().equals("sphere")) {
                 Sphere current = (Sphere) shape.getShape3D();
-
                 Sphere3D duplicate = createSphere(
                         current.getRadius(),
                         current.getTranslateX()+1,
                         current.getTranslateY(),
                         current.getTranslateZ());
-                duplicate.applyTransform(shape.getCurrentTransfrom());
-                duplicate.getShape3D().setMaterial(current.getMaterial());
-
-                selectedObject.remove(shape);
-                group.getChildren().remove(shape.getOutline());
-                shape.removeOutline();
-                selectedObject.add(duplicate);
-                Sphere outline = (Sphere)duplicate.createOutline();
-                group.getChildren().add(outline);
+                shape.deepCopyObject(duplicate,false);
+                renderableObjectClicked(duplicate);
             }
         });
     }
@@ -200,6 +180,7 @@ public class Drawing {
 
     public VBox generateButtons(){
         ButtonBar buttonBar = new ButtonBar();
+        ToggleGroup toggleGroup = new ToggleGroup();
 
         rotateButton = new ToggleButton("Rotate");
         rotateButton.setMaxWidth(50);
@@ -207,7 +188,7 @@ public class Drawing {
         moveButton.setMaxWidth(50);
         selectButton = new ToggleButton("Configure");
         selectButton.setMaxWidth(50);
-        selectButton.setOnAction(clicked -> unselectAllObjects());
+        selectButton.setOnAction(clicked -> toggleAllObjects());
         ToggleButton squareButton = new ToggleButton("Add Square");
         squareButton.setMaxWidth(50);
         squareButton.setOnAction(clicked -> new ConfigBox().generateSquareBox());
@@ -217,13 +198,18 @@ public class Drawing {
         sphereButton.setOnAction(clicked -> new ConfigBox().generateSphereBox());
         ToggleButton deleteButton = new ToggleButton("Delete");
         deleteButton.setMaxWidth(50);
-        deleteButton.setOnAction(clicked -> deleteSelected());
+        deleteButton.setOnAction(clicked -> {
+            deleteSelected();
+            toggleGroup.selectToggle(null);
+        });
         ToggleButton duplicateButton = new ToggleButton("Duplicate");
         duplicateButton.setMaxWidth(50);
-        duplicateButton.setOnAction(clicked -> duplicateSelected());
+        duplicateButton.setOnAction(clicked -> {
+            duplicateSelected();
+            toggleGroup.selectToggle(null);
+        });
         duplicateButton.setStyle("-fx-font-size: 10px;");
 
-        ToggleGroup toggleGroup = new ToggleGroup();
         rotateButton.setToggleGroup(toggleGroup);
         moveButton.setToggleGroup(toggleGroup);
         selectButton.setToggleGroup(toggleGroup);
@@ -241,21 +227,12 @@ public class Drawing {
 
         Button hideLightButton = new Button("Hide Light");
         hideLightButton.setOnAction(clicked ->{
-            if(on) {
-                lights.forEach(light -> {
-                    light.hideShape();
-                    group.getChildren().remove(light.getOutline());
-                    light.removeOutline();
-                    try {
-                        selectedObject.remove(light);
-                    }catch (Exception e){}
-                });
-                on = false;
+            if(lightManager.isLightsOn()) {
+                lightManager.hideLights();
                 hideLightButton.setText("Show Light");
             }
             else {
-                lights.forEach(light -> light.showShape());
-                on = true;
+                lightManager.showLights();
                 hideLightButton.setText("Hide Light");
             }
         });
@@ -270,7 +247,7 @@ public class Drawing {
         ButtonBar.setButtonData(duplicateButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(resetCameraButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(hideLightButton, ButtonBar.ButtonData.APPLY);
-        buttonBar.getButtons().addAll(sphereButton,squareButton,duplicateButton,deleteButton,rotateButton,selectButton,moveButton,hideLightButton,resetCameraButton);
+        buttonBar.getButtons().addAll(sphereButton,squareButton, duplicateButton, deleteButton,rotateButton,selectButton,moveButton,hideLightButton,resetCameraButton);
 
         buttonBar.getButtons().forEach(button ->setFont(button));
 
@@ -309,8 +286,7 @@ public class Drawing {
         vBox.getChildren().add(scene);
         vBox.setAlignment(Pos.TOP_LEFT);
         Sphere3D sphere = createSphere(5,38,-17,-77);
-        group.getChildren().add(sphere.createPointLight());
-        lights.add(sphere);
+        lightManager.addLight(sphere);
         group.getChildren().add(new AmbientLight(Color.rgb(192,192,192,0.01)));
         Scene mainScene = new Scene(vBox,1000,1000);
         mainScene.setFill(Color.GREY);
@@ -377,14 +353,26 @@ public class Drawing {
         return selectedObject.get(0);
     }
 
-    public void unselectAllObjects(){
-        ArrayList<RenderableObject> tempObjects = new ArrayList<>(selectedObject);
-        tempObjects.forEach(shape -> unselectObject(shape));
+    public void addNode(Node node){
+        group.getChildren().add(node);
     }
 
-    public void unselectObject(RenderableObject object){
-        MouseEvent mouseEvent = new MouseEvent(MouseEvent.MOUSE_CLICKED,0, 0, 0, 0, MouseButton.PRIMARY, 0, false, false, false, false, false, false, false, false, false, false, null);
-        object.getShape3D().fireEvent(mouseEvent);
+    public void removeNode(Node node){
+        group.getChildren().remove(node);
+    }
+
+    public void addLight(RenderableObject object){
+        lightManager.addLight(object);
+    }
+
+    public void removeLight(RenderableObject object){
+        lightManager.removeLight(object);
+    }
+
+
+    public void toggleAllObjects(){
+        ArrayList<RenderableObject> tempObjects = new ArrayList<>(selectedObject);
+        tempObjects.forEach(shape -> renderableObjectClicked(shape));
     }
 
     public void removeObject(RenderableObject object){
@@ -395,9 +383,9 @@ public class Drawing {
     }
 
     public void addObject(RenderableObject object){
-        selectedObject.remove(object);
-        group.getChildren().remove(object.shape);
-        group.getChildren().remove(object.outline);
-        group.getChildren().remove(object.pointLight);
+        selectedObject.add(object);
+        group.getChildren().add(object.shape);
+        group.getChildren().add(object.outline);
+        group.getChildren().add(object.pointLight);
     }
 }

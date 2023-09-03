@@ -16,9 +16,9 @@ public class Main extends Application {
     @Override
     public void start(Stage stage){
         stage.setTitle("3D modelling");
-        Drawing drawing = Drawing.getInstance();
+        DrawingGUI drawingGUI = DrawingGUI.getInstance();
         // Generates the scene
-        Scene scene = drawing.generateScene();
+        Scene scene = drawingGUI.generateScene();
         //sets the css for the whole scene
         scene.getStylesheets().add(Main.class.getResource("/main.css").toExternalForm());
         stage.setScene(scene);
@@ -26,29 +26,29 @@ public class Main extends Application {
         // Binds a series of keys with the relevant function to be called upon pressing of the key
         stage.addEventHandler(KeyEvent.KEY_PRESSED, key -> {
             // Defines which functions should be called when a key is pressed in rotate mode
-            if(drawing.rotateSelected()) {
+            if(drawingGUI.rotateSelected()) {
                 switch (key.getCode()) {
-                    case RIGHT, D -> drawing.rotateY(1);
-                    case LEFT, A -> drawing.rotateY(-1);
-                    case UP, W -> drawing.rotateX(1);
-                    case DOWN, S -> drawing.rotateX(-1);
-                    case E -> drawing.rotateZ(1);
-                    case Q -> drawing.rotateZ(-1);
+                    case RIGHT, D -> drawingGUI.rotateY(1);
+                    case LEFT, A -> drawingGUI.rotateY(-1);
+                    case UP, W -> drawingGUI.rotateX(1);
+                    case DOWN, S -> drawingGUI.rotateX(-1);
+                    case E -> drawingGUI.rotateZ(1);
+                    case Q -> drawingGUI.rotateZ(-1);
                 }
             // Defines which functions should be called when a key is pressed in move mode
-            } else if (drawing.moveSelected()) {
+            } else if (drawingGUI.moveSelected()) {
                 switch (key.getCode()) {
-                    case RIGHT, D -> drawing.setX(1,true);
-                    case LEFT, A -> drawing.setX(-1,true);
-                    case UP, W -> drawing.setY(-1,true);
-                    case DOWN, S -> drawing.setY(1,true);
-                    case E -> drawing.setZ(1,true);
-                    case Q -> drawing.setZ(-1,true);
+                    case RIGHT, D -> drawingGUI.setX(1,true);
+                    case LEFT, A -> drawingGUI.setX(-1,true);
+                    case UP, W -> drawingGUI.setY(-1,true);
+                    case DOWN, S -> drawingGUI.setY(1,true);
+                    case E -> drawingGUI.setZ(1,true);
+                    case Q -> drawingGUI.setZ(-1,true);
                 }
             }
         });
         // Binds the scroll wheel to call drawing.scroll with the scrolls delta upon the user scrolling
-        stage.addEventHandler(ScrollEvent.SCROLL, scroll -> drawing.scroll(scroll.getDeltaY()));
+        stage.addEventHandler(ScrollEvent.SCROLL, scroll -> drawingGUI.scroll(scroll.getDeltaY()));
     }
 
     public static void main(String[] args) {

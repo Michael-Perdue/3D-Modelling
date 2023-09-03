@@ -3,6 +3,7 @@ package modelling;
 import javafx.scene.PointLight;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape3D;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
@@ -122,6 +123,30 @@ public abstract class RenderableObject {
         shape.getTransforms().add(currentTransfrom);
     }
 
+    public PointLight createPointLight(){
+        this.pointLight = new PointLight();
+        pointLight.setTranslateZ(shape.getTranslateZ());
+        pointLight.setTranslateX(shape.getTranslateX());
+        pointLight.setTranslateY(shape.getTranslateY());
+        pointLight.getTransforms().add(currentTransfrom);
+        pointLight.setColor(Color.rgb(255,255,255,0.2));
+        pointLight.setPickOnBounds(false);
+        pointLight.setMouseTransparent(true);
+        return pointLight;
+    }
+
+    public void removePointLight(){
+        pointLight = null;
+    }
+
+    public PointLight getPointLight(){
+        return pointLight;
+    }
+
+    public void setPointLight(PointLight pointLight){
+        this.pointLight = pointLight;
+    }
+
     public void hideShape(){
         shape.setVisible(false);
     }
@@ -130,12 +155,20 @@ public abstract class RenderableObject {
         shape.setVisible(true);
     }
 
-    protected void deepCopyObject(RenderableObject object){
+    protected void deepCopyObject(RenderableObject object, boolean deleteOriginal){
         object.applyTransform(currentTransfrom);
         object.getShape3D().setMaterial(shape.getMaterial());
-        Drawing.getInstance().removeObject(this);
-        MouseEvent mouseEvent = new MouseEvent(MouseEvent.MOUSE_CLICKED,0, 0, 0, 0, MouseButton.PRIMARY, 0, false, false, false, false, false, false, false, false, false, false, null);
-        object.shape.fireEvent(mouseEvent);
+        if(pointLight != null) {
+            object.setPointLight(pointLight);
+            DrawingGUI.getInstance().addLight(object);
+            if(deleteOriginal) {
+                DrawingGUI.getInstance().removeLight(this);
+            }
+        }
+        if(deleteOriginal) {
+            DrawingGUI.getInstance().removeObject(this);
+            DrawingGUI.getInstance().renderableObjectClicked(object);
+        }
     }
 
 }

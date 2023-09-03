@@ -34,27 +34,9 @@ public class Sphere3D extends RenderableObject{
         return this.outline;
     }
 
-    public PointLight createPointLight(){
-        Sphere sphere = (Sphere)this.shape;
-        this.pointLight = new PointLight();
-        pointLight.setTranslateZ(sphere.getTranslateZ());
-        pointLight.setTranslateX(sphere.getTranslateX());
-        pointLight.setTranslateY(sphere.getTranslateY());
-        pointLight.getTransforms().add(currentTransfrom);
-        pointLight.setColor(Color.rgb(255,255,255,0.2));
-        pointLight.setPickOnBounds(false);
-        pointLight.setMouseTransparent(true);
-        PhongMaterial material = new PhongMaterial();
-        material.setDiffuseColor(new Color(0.0, 0.0, 0.0, 0.7));
-        material.setSpecularColor(new Color(0.0, 0.0, 0.0, 0.7));
-        material.setSelfIlluminationMap(null);
-        sphere.setMaterial(material);
-        return pointLight;
-    }
-
     public void setAllDimensions(double radius){
-        Sphere3D sphere = Drawing.getInstance().createSphere(radius,shape.getTranslateX(),shape.getTranslateY(),shape.getTranslateZ());
-        deepCopyObject(sphere);
+        Sphere3D sphere = DrawingGUI.getInstance().createSphere(radius,shape.getTranslateX(),shape.getTranslateY(),shape.getTranslateZ());
+        deepCopyObject(sphere,true);
     }
 
 }

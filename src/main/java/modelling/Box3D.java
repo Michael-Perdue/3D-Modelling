@@ -1,9 +1,11 @@
 package modelling;
 
+import javafx.scene.PointLight;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Shape3D;
+import javafx.scene.shape.Sphere;
 
 public class Box3D extends RenderableObject {
 
@@ -32,8 +34,8 @@ public class Box3D extends RenderableObject {
     }
 
     public void setSize(double depth, double height, double width){
-        Box3D newBox = Drawing.getInstance().createBox(depth,height,width,shape.getTranslateX(),shape.getTranslateY(),shape.getTranslateZ());
-        deepCopyObject(newBox);
+        Box3D newBox = DrawingGUI.getInstance().createBox(depth,height,width,shape.getTranslateX(),shape.getTranslateY(),shape.getTranslateZ());
+        deepCopyObject(newBox,true);
     }
 
     public void setWidth(double width){;
@@ -50,6 +52,7 @@ public class Box3D extends RenderableObject {
         Box box = (Box)shape;
         setSize(depth,box.getHeight(),box.getWidth());
     }
+
 
     public void setAllDimensions(double depth, double height, double width){
         setSize(depth,height,width);
