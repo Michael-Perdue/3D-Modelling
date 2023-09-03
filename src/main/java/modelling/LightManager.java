@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 public class LightManager {
 
-    private boolean lightOnStatus = false;
+    private boolean lightVisibleStatus = false;
+    private boolean lightEnabledStatus = true;
     private ArrayList<RenderableObject> lights = new ArrayList<>();
     public void addLight(RenderableObject renderableObject){
         DrawingGUI.getInstance().addNode(renderableObject.createPointLight());
@@ -18,7 +19,7 @@ public class LightManager {
     }
 
     public void hideLights(){
-        lightOnStatus = false;
+        lightVisibleStatus = false;
         lights.forEach(light -> {
             light.hideShape();
             try {
@@ -29,11 +30,30 @@ public class LightManager {
     }
 
     public void showLights(){
-        lightOnStatus = true;
+        lightVisibleStatus = true;
         lights.forEach(light -> light.showShape());
     }
 
-    public boolean isLightsOn(){
-        return lightOnStatus;
+    public void enableLights(){
+        lightEnabledStatus = true;
+        lights.forEach(light -> {
+            DrawingGUI.getInstance().addNode(light.createPointLight());
+        });
+    }
+
+    public void disableLights(){
+        lightEnabledStatus = false;
+        lights.forEach(light -> {
+            DrawingGUI.getInstance().removeNode(light.getPointLight());
+            light.removePointLight();
+        });
+    }
+
+    public boolean isLightsVisable(){
+        return lightVisibleStatus;
+    }
+
+    public boolean isLightsEnabled(){
+        return lightEnabledStatus;
     }
 }

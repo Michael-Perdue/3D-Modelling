@@ -10,7 +10,6 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Box;
@@ -191,11 +190,16 @@ public class DrawingGUI {
         selectButton.setOnAction(clicked -> toggleAllObjects());
         ToggleButton squareButton = new ToggleButton("Add Square");
         squareButton.setMaxWidth(50);
-        squareButton.setOnAction(clicked -> new ConfigBox().generateSquareBox());
-        squareButton.setStyle("-fx-font-size: 10px;");
+        squareButton.setOnAction(clicked -> {
+            new ConfigBox().generateSquareBox();
+            toggleGroup.selectToggle(null);
+        });
         ToggleButton sphereButton = new ToggleButton("Add Sphere");
         sphereButton.setMaxWidth(50);
-        sphereButton.setOnAction(clicked -> new ConfigBox().generateSphereBox());
+        sphereButton.setOnAction(clicked -> {
+            new ConfigBox().generateSphereBox();
+            toggleGroup.selectToggle(null);
+        });
         ToggleButton deleteButton = new ToggleButton("Delete");
         deleteButton.setMaxWidth(50);
         deleteButton.setOnAction(clicked -> {
@@ -227,7 +231,7 @@ public class DrawingGUI {
 
         Button hideLightButton = new Button("Hide Light");
         hideLightButton.setOnAction(clicked ->{
-            if(lightManager.isLightsOn()) {
+            if(lightManager.isLightsVisable()) {
                 lightManager.hideLights();
                 hideLightButton.setText("Show Light");
             }
@@ -238,6 +242,19 @@ public class DrawingGUI {
         });
         hideLightButton.setMaxWidth(90);
 
+        Button disableLightButton = new Button("Disable Lighting");
+        disableLightButton.setOnAction(clicked ->{
+            if(lightManager.isLightsEnabled()) {
+                lightManager.disableLights();
+                disableLightButton.setText("Enable lighting");
+            }
+            else {
+                lightManager.enableLights();
+                disableLightButton.setText("Disable Lighting");
+            }
+        });
+        disableLightButton.setMaxWidth(110);
+
         ButtonBar.setButtonData(squareButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(sphereButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(rotateButton, ButtonBar.ButtonData.APPLY);
@@ -247,7 +264,8 @@ public class DrawingGUI {
         ButtonBar.setButtonData(duplicateButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(resetCameraButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(hideLightButton, ButtonBar.ButtonData.APPLY);
-        buttonBar.getButtons().addAll(sphereButton,squareButton, duplicateButton, deleteButton,rotateButton,selectButton,moveButton,hideLightButton,resetCameraButton);
+        ButtonBar.setButtonData(disableLightButton, ButtonBar.ButtonData.APPLY);
+        buttonBar.getButtons().addAll(sphereButton,squareButton, duplicateButton, deleteButton,rotateButton,selectButton,moveButton,hideLightButton,disableLightButton,resetCameraButton);
 
         buttonBar.getButtons().forEach(button ->setFont(button));
 
