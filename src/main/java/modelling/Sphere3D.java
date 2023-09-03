@@ -1,10 +1,8 @@
 package modelling;
 
 import javafx.scene.PointLight;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Box;
 import javafx.scene.shape.Shape3D;
 import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
@@ -52,6 +50,11 @@ public class Sphere3D extends RenderableObject{
         material.setSelfIlluminationMap(null);
         sphere.setMaterial(material);
         return pointLight;
+    }
+
+    public void setAllDimensions(double radius){
+        Sphere3D sphere = Drawing.getInstance().createSphere(radius,shape.getTranslateX(),shape.getTranslateY(),shape.getTranslateZ());
+        deepCopyObject(sphere);
     }
 
 }

@@ -1,6 +1,8 @@
 package modelling;
 
 import javafx.scene.PointLight;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Shape3D;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
@@ -127,4 +129,13 @@ public abstract class RenderableObject {
     public void showShape(){
         shape.setVisible(true);
     }
+
+    protected void deepCopyObject(RenderableObject object){
+        object.applyTransform(currentTransfrom);
+        object.getShape3D().setMaterial(shape.getMaterial());
+        Drawing.getInstance().removeObject(this);
+        MouseEvent mouseEvent = new MouseEvent(MouseEvent.MOUSE_CLICKED,0, 0, 0, 0, MouseButton.PRIMARY, 0, false, false, false, false, false, false, false, false, false, false, null);
+        object.shape.fireEvent(mouseEvent);
+    }
+
 }

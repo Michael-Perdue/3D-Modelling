@@ -173,7 +173,8 @@ public class ConfigBox {
         if (button) {
             Button buttonDimension = new Button("Change Dimension");
             buttonDimension.setOnAction(click -> {
-                //set dimension of selected objects
+                Drawing.getInstance().setSphereDimensions(Double.parseDouble(radiusTextField.getText()));
+                stage.close();
             });
             vBox.getChildren().add(buttonDimension);
         }
@@ -270,9 +271,14 @@ public class ConfigBox {
             addBoxDimensions(vBox, true);
             vboxHeight += 100;
         }
+        if(Drawing.getInstance().selectedType().equals("sphere")) {
+            addSphereDimensions(vBox, true);
+            vboxHeight += 30;
+        }
         addMaterials(vBox,true);
         Scene scene = new Scene(vBox,370,vboxHeight);
         scene.getStylesheets().add(ConfigBox.class.getResource("/main.css").toExternalForm());
+        stage.setOnCloseRequest(close -> Drawing.getInstance().unselectAllObjects());
         stage.setTitle("Config shape");
         stage.setScene(scene);
         stage.show();

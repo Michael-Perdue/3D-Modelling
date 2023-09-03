@@ -1,7 +1,5 @@
 package modelling;
 
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -35,11 +33,7 @@ public class Box3D extends RenderableObject {
 
     public void setSize(double depth, double height, double width){
         Box3D newBox = Drawing.getInstance().createBox(depth,height,width,shape.getTranslateX(),shape.getTranslateY(),shape.getTranslateZ());
-        newBox.applyTransform(currentTransfrom);
-        newBox.getShape3D().setMaterial(shape.getMaterial());
-        Drawing.getInstance().removeObject(this);
-        MouseEvent mouseEvent = new MouseEvent(MouseEvent.MOUSE_CLICKED,0, 0, 0, 0, MouseButton.PRIMARY, 0, false, false, false, false, false, false, false, false, false, false, null);
-        newBox.shape.fireEvent(mouseEvent);
+        deepCopyObject(newBox);
     }
 
     public void setWidth(double width){;

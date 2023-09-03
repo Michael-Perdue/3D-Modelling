@@ -12,6 +12,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -206,19 +207,20 @@ public class Drawing {
         moveButton.setMaxWidth(50);
         selectButton = new ToggleButton("Configure");
         selectButton.setMaxWidth(50);
+        selectButton.setOnAction(clicked -> unselectAllObjects());
         ToggleButton squareButton = new ToggleButton("Add Square");
         squareButton.setMaxWidth(50);
-        squareButton.setOnAction(clicked ->new ConfigBox().generateSquareBox());
+        squareButton.setOnAction(clicked -> new ConfigBox().generateSquareBox());
         squareButton.setStyle("-fx-font-size: 10px;");
         ToggleButton sphereButton = new ToggleButton("Add Sphere");
         sphereButton.setMaxWidth(50);
-        sphereButton.setOnAction(clicked ->new ConfigBox().generateSphereBox());
+        sphereButton.setOnAction(clicked -> new ConfigBox().generateSphereBox());
         ToggleButton deleteButton = new ToggleButton("Delete");
         deleteButton.setMaxWidth(50);
-        deleteButton.setOnAction(clicked ->deleteSelected());
+        deleteButton.setOnAction(clicked -> deleteSelected());
         ToggleButton duplicateButton = new ToggleButton("Duplicate");
         duplicateButton.setMaxWidth(50);
-        duplicateButton.setOnAction(clicked ->duplicateSelected());
+        duplicateButton.setOnAction(clicked -> duplicateSelected());
         duplicateButton.setStyle("-fx-font-size: 10px;");
 
         ToggleGroup toggleGroup = new ToggleGroup();
@@ -353,6 +355,16 @@ public class Drawing {
         });
     }
 
+    public void setSphereDimensions(double radius){
+        ArrayList<RenderableObject> tempList = new ArrayList<>(selectedObject);
+        tempList.forEach(shape-> {
+            try {
+                Sphere3D sphere = (Sphere3D) shape;
+                sphere.setAllDimensions(radius);
+            }catch (Exception e){e.printStackTrace();}
+        });
+    }
+
     public String selectedType(){
         return selectedObject.get(0).getType();
     }
@@ -363,6 +375,16 @@ public class Drawing {
 
     public RenderableObject getSelectedObject() {
         return selectedObject.get(0);
+    }
+
+    public void unselectAllObjects(){
+        ArrayList<RenderableObject> tempObjects = new ArrayList<>(selectedObject);
+        tempObjects.forEach(shape -> unselectObject(shape));
+    }
+
+    public void unselectObject(RenderableObject object){
+        MouseEvent mouseEvent = new MouseEvent(MouseEvent.MOUSE_CLICKED,0, 0, 0, 0, MouseButton.PRIMARY, 0, false, false, false, false, false, false, false, false, false, false, null);
+        object.getShape3D().fireEvent(mouseEvent);
     }
 
     public void removeObject(RenderableObject object){
