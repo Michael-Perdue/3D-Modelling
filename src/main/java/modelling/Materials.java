@@ -24,17 +24,17 @@ public class Materials {
     }
 
     private void addBaseMaterials(){
-        addMaterial("cobble","/cobble.png","/cobbleNormal.png","/cobbleSpec.png");
-        addMaterial("wood","/wood.jpg","/woodNormal.jpg","/woodSpec.jpg");
+        addMaterial("Cobble","/cobble.png","/cobbleNormal.png","/cobbleSpec.png");
+        addMaterial("Wood","/wood.jpg","/woodNormal.jpg","/woodSpec.jpg");
         addLightBoxMaterial();
     }
 
     public Material getWood(){
-        return materials.get("wood");
+        return materials.get("Wood");
     }
 
     public Material getCobble(){
-        return materials.get("cobble");
+        return materials.get("Cobble");
     }
 
     public void addMaterial(String name, String diffusePATH, String bumpPATH, String specPATH){

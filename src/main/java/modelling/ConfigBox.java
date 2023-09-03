@@ -12,6 +12,8 @@ import javafx.scene.shape.Shape3D;
 import javafx.scene.shape.Sphere;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 public class ConfigBox {
 
     // Stores dimensions of shape text fields to be able to get the value of them when a button is clicked
@@ -227,12 +229,19 @@ public class ConfigBox {
         radioButtonNone.setToggleGroup(toggleGroup);
         toggleGroup.selectToggle(radioButtonNone);
         vBox.getChildren().add(radioButtonNone);
+        RenderableObject renderableObject;
+        if(button)
+            renderableObject = DrawingGUI.getInstance().getSelectedObject();
+        else
+            renderableObject = null;
         Materials.getInstance().getAllMaterials().forEach((name, material) -> {
             RadioButton radioButton = new RadioButton(name);
             radioButton.setToggleGroup(toggleGroup);
             vBox.getChildren().add(radioButton);
             if(button){
                 radioButton.setOnAction(clicked-> DrawingGUI.getInstance().setMaterial(name));
+                if(renderableObject.getMaterial().equals(name))
+                    toggleGroup.selectToggle(radioButton);
             }else {
                 radioButton.setOnAction(clicked->this.material = name);
             }

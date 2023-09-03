@@ -4,6 +4,7 @@ import javafx.scene.PointLight;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Material;
 import javafx.scene.shape.Shape3D;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
@@ -14,6 +15,7 @@ public abstract class RenderableObject {
     protected Shape3D outline;
     protected PointLight pointLight;
     protected String type;
+    protected String material = "";
 
     private void rotation(Rotate rotate){
         currentTransfrom = currentTransfrom.createConcatenation(rotate);
@@ -115,6 +117,15 @@ public abstract class RenderableObject {
 
     public Transform getCurrentTransfrom(){
         return currentTransfrom;
+    }
+
+    public void applyMaterial(String material){
+        shape.setMaterial(Materials.getInstance().getMaterial(material));
+        this.material = material;
+    }
+
+    public String getMaterial(){
+        return material;
     }
 
     public void applyTransform(Transform transform){

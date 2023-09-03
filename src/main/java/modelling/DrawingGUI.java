@@ -292,9 +292,9 @@ public class DrawingGUI {
         Box3D box1 = createBox(50,50,50);
         Box3D box2 = createBox(30,20,60,15,-35,-1);
         Box3D box3 = createBox(30,20,60,-18,-35,-1);
-        box1.getShape3D().setMaterial(Materials.getInstance().getCobble());
-        box2.getShape3D().setMaterial(Materials.getInstance().getWood());
-        box3.getShape3D().setMaterial(Materials.getInstance().getWood());
+        box1.applyMaterial("Cobble");
+        box2.applyMaterial("Wood");
+        box3.applyMaterial("Wood");
         scene = new SubScene(group,width,height,true, SceneAntialiasing.DISABLED);
         scene.setCamera(camera);
         scene.setFill(Color.GREY);
@@ -303,6 +303,7 @@ public class DrawingGUI {
         vBox.getChildren().add(scene);
         vBox.setAlignment(Pos.TOP_LEFT);
         Sphere3D sphere = createSphere(5,38,-17,-77);
+        sphere.applyMaterial("Light Box");
         lightManager.addLight(sphere);
         group.getChildren().add(new AmbientLight(Color.rgb(192,192,192,0.01)));
         Scene mainScene = new Scene(vBox,1000,1000);
