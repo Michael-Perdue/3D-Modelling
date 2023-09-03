@@ -212,7 +212,6 @@ public class DrawingGUI {
             duplicateSelected();
             toggleGroup.selectToggle(null);
         });
-        duplicateButton.setStyle("-fx-font-size: 10px;");
 
         rotateButton.setToggleGroup(toggleGroup);
         moveButton.setToggleGroup(toggleGroup);
@@ -229,18 +228,18 @@ public class DrawingGUI {
         });
         resetCameraButton.setMaxWidth(90);
 
-        Button hideLightButton = new Button("Hide Light");
+        Button hideLightButton = new Button("Hide Lights");
         hideLightButton.setOnAction(clicked ->{
             if(lightManager.isLightsVisable()) {
                 lightManager.hideLights();
-                hideLightButton.setText("Show Light");
+                hideLightButton.setText("Show Lights");
             }
             else {
                 lightManager.showLights();
-                hideLightButton.setText("Hide Light");
+                hideLightButton.setText("Hide Lights");
             }
         });
-        hideLightButton.setMaxWidth(90);
+        hideLightButton.setMaxWidth(50);
 
         Button disableLightButton = new Button("Disable Lighting");
         disableLightButton.setOnAction(clicked ->{

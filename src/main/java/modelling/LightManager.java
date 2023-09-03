@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class LightManager {
 
-    private boolean lightVisibleStatus = false;
+    private boolean lightVisibleStatus = true;
     private boolean lightEnabledStatus = true;
     private ArrayList<RenderableObject> lights = new ArrayList<>();
     public void addLight(RenderableObject renderableObject){
