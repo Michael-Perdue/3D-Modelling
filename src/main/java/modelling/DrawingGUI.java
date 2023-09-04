@@ -26,9 +26,9 @@ public class DrawingGUI {
     private final Group group = new Group();
     private ArrayList<RenderableObject> selectedObject= new ArrayList<RenderableObject>();
     private PerspectiveCamera camera = new PerspectiveCamera(true);
-    private double startX = 0, startY = 0, startAngleX = 0, startAngleY = 0;
+    private double startX = 0, startY = 0, startAngleX = 0, startAngleY = 0, initialCameraX =0, initialCameraY =0 ,getInitialCameraz =0;
     private final DoubleProperty angleX = new SimpleDoubleProperty(0) , angleY = new SimpleDoubleProperty(0);
-    private boolean rightClick = false;
+    private boolean rightClick = false, drag = false;
     private LightManager lightManager = new LightManager();
     private ToggleButton rotateButton,moveButton, selectButton;
     private static DrawingGUI instance;
@@ -63,16 +63,22 @@ public class DrawingGUI {
                 startAngleY = angleY.get();
                 //sets it true that the user last mouse click was the right one
                 rightClick = true;
+                initialCameraX = camera.getTranslateX();
+                initialCameraY = camera.getTranslateY();
             }else {
                 rightClick = false;
             }
         });
         scene.setOnMouseDragged(dragged -> {
             //Checks if the users last mouse click was the right one
-            if(rightClick) {
+            if(rightClick && !drag) {
                 //Sets the cameras new angle
                 angleX.set(startAngleX - (startY - dragged.getSceneY()));
                 angleY.set(startAngleY + startX - dragged.getSceneX());
+            }else if(rightClick){
+                camera.setTranslateX(initialCameraX - (dragged.getSceneX() - startX) * 0.2);
+                camera.setTranslateY(initialCameraY - (dragged.getSceneY() - startY) * 0.2);
+
             }
         });
     }
@@ -182,11 +188,11 @@ public class DrawingGUI {
         ToggleGroup toggleGroup = new ToggleGroup();
 
         rotateButton = new ToggleButton("Rotate");
-        rotateButton.setMaxWidth(50);
+        rotateButton.setMaxWidth(30);
         moveButton = new ToggleButton("Move");
-        moveButton.setMaxWidth(50);
+        moveButton.setMaxWidth(30);
         selectButton = new ToggleButton("Configure");
-        selectButton.setMaxWidth(50);
+        selectButton.setMaxWidth(30);
         selectButton.setOnAction(clicked -> toggleAllObjects());
         ToggleButton squareButton = new ToggleButton("Add Square");
         squareButton.setMaxWidth(50);
@@ -201,7 +207,7 @@ public class DrawingGUI {
             toggleGroup.selectToggle(null);
         });
         ToggleButton deleteButton = new ToggleButton("Delete");
-        deleteButton.setMaxWidth(50);
+        deleteButton.setMaxWidth(30);
         deleteButton.setOnAction(clicked -> {
             deleteSelected();
             toggleGroup.selectToggle(null);
@@ -212,6 +218,19 @@ public class DrawingGUI {
             duplicateSelected();
             toggleGroup.selectToggle(null);
         });
+
+        Button dragCameraButton = new Button("Drag Camera");
+        dragCameraButton.setOnAction(clicked ->{
+            if(!drag){
+                dragCameraButton.setText("Rotate Camera");
+                drag = true;
+            }else {
+                dragCameraButton.setText("Drag Camera");
+                drag = false;
+            }
+        });
+        dragCameraButton.setMaxWidth(100);
+
 
         rotateButton.setToggleGroup(toggleGroup);
         moveButton.setToggleGroup(toggleGroup);
@@ -262,9 +281,11 @@ public class DrawingGUI {
         ButtonBar.setButtonData(deleteButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(duplicateButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(resetCameraButton, ButtonBar.ButtonData.APPLY);
+        ButtonBar.setButtonData(dragCameraButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(hideLightButton, ButtonBar.ButtonData.APPLY);
         ButtonBar.setButtonData(disableLightButton, ButtonBar.ButtonData.APPLY);
-        buttonBar.getButtons().addAll(sphereButton,squareButton, duplicateButton, deleteButton,rotateButton,selectButton,moveButton,hideLightButton,disableLightButton,resetCameraButton);
+        buttonBar.getButtons().addAll(sphereButton,squareButton, duplicateButton, deleteButton,rotateButton,selectButton,moveButton,hideLightButton,disableLightButton,dragCameraButton,resetCameraButton);
+
 
         buttonBar.getButtons().forEach(button ->setFont(button));
 
@@ -286,15 +307,21 @@ public class DrawingGUI {
     }
 
     public Scene generateScene(){
-        camera.setTranslateZ(-400);
+        camera.setTranslateZ(-200);
         camera.setNearClip(1);
         camera.setFarClip(10000);
-        Box3D box1 = createBox(50,50,50);
-        Box3D box2 = createBox(30,20,60,15,-35,-1);
-        Box3D box3 = createBox(30,20,60,-18,-35,-1);
-        box1.applyMaterial("Cobble");
-        box2.applyMaterial("Wood");
-        box3.applyMaterial("Wood");
+        for(int x =-1; x<2;x++){
+            for(int y=-1; y<2;y++){
+                for (int z=-1;z<2;z++) {
+                    Box3D box = createBox(5, 5, 5, x*10, y*10, z*10);
+                    if(x==0 && y==0 && z ==0)
+                        box.applyMaterial("Cobble");
+                    else
+                        box.applyMaterial("Wood");
+                }
+            }
+        }
+
         scene = new SubScene(group,width,height,true, SceneAntialiasing.DISABLED);
         scene.setCamera(camera);
         scene.setFill(Color.GREY);

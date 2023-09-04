@@ -26,6 +26,8 @@ public class Materials {
     private void addBaseMaterials(){
         addMaterial("Cobble","/cobble.png","/cobbleNormal.png","/cobbleSpec.png");
         addMaterial("Wood","/wood.jpg","/woodNormal.jpg","/woodSpec.jpg");
+        addMaterial("Earth","/earth.jpg",null,"/earthSpec.jpg");
+        addMaterial("Sun","/sun.jpg",null,null);
         addLightBoxMaterial();
     }
 
@@ -40,10 +42,10 @@ public class Materials {
     public void addMaterial(String name, String diffusePATH, String bumpPATH, String specPATH){
         PhongMaterial material = new PhongMaterial();
         material.setDiffuseMap(new Image(DrawingGUI.class.getResourceAsStream(diffusePATH)));
-        material.setBumpMap(new Image(DrawingGUI.class.getResourceAsStream(bumpPATH)));
-        if(specPATH != null) {
-            material.setSpecularMap(new Image(DrawingGUI.class.getResourceAsStream(bumpPATH)));
-        }
+        if(bumpPATH != null)
+            material.setBumpMap(new Image(DrawingGUI.class.getResourceAsStream(bumpPATH)));
+        if(specPATH != null)
+            material.setSpecularMap(new Image(DrawingGUI.class.getResourceAsStream(specPATH)));
         materials.put(name,material);
     }
 
