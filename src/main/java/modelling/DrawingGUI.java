@@ -76,8 +76,8 @@ public class DrawingGUI {
                 angleX.set(startAngleX - (startY - dragged.getSceneY()));
                 angleY.set(startAngleY + startX - dragged.getSceneX());
             }else if(rightClick){
-                camera.setTranslateX(initialCameraX - (dragged.getSceneX() - startX) * 0.2);
-                camera.setTranslateY(initialCameraY - (dragged.getSceneY() - startY) * 0.2);
+                camera.setTranslateX(initialCameraX - (dragged.getSceneX() - startX) * 0.1);
+                camera.setTranslateY(initialCameraY - (dragged.getSceneY() - startY) * 0.1);
 
             }
         });
@@ -329,7 +329,7 @@ public class DrawingGUI {
         VBox vBox = generateButtons();
         vBox.getChildren().add(scene);
         vBox.setAlignment(Pos.TOP_LEFT);
-        Sphere3D sphere = createSphere(5,38,-17,-77);
+        Sphere3D sphere = createSphere(4,38,-19,-31);
         sphere.applyMaterial("Light Box");
         lightManager.addLight(sphere);
         group.getChildren().add(new AmbientLight(Color.rgb(192,192,192,0.01)));
@@ -339,7 +339,7 @@ public class DrawingGUI {
     }
 
     public void scroll(double movement){
-        group.translateZProperty().set(group.getTranslateZ() + movement);
+        group.translateZProperty().set(group.getTranslateZ() + movement*0.1);
     }
 
     public void rotateX(double angle){
