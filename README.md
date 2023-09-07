@@ -1,7 +1,7 @@
 # Demo
 Below is a gif of the program working:
 
-![](https://github.com/Michael-Perdue/3D-Modelling/blob/master/demo.gif)
+![](https://github.com/Michael-Perdue/Michael-Perdue.github.io/blob/main/assets/3D-Modelling-Demo.gif)
 
 For a higher fps video than the gif please click the YouTube video below:
 
