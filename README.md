@@ -1,5 +1,5 @@
 # Demo
-Below is a gif of the program working:
+Below is a low fps gif of the program working:
 
 ![](https://github.com/Michael-Perdue/Michael-Perdue.github.io/blob/main/assets/3D-Modelling-Demo.gif)
 
