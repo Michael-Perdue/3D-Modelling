@@ -1,6 +1,8 @@
 # Demo
 Below is a gif of the program working:
 
+![](https://github.com/Michael-Perdue/3D-Modelling/blob/master/demo.gif)
+
 For a higher fps video than the gif please click the YouTube video below:
 
 [![Watch the demo](https://img.youtube.com/vi/Ou8jlbjl4M8/default.jpg)](https://youtu.be/Ou8jlbjl4M8)
