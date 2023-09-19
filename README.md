@@ -6,8 +6,6 @@ The program features a toolbar with various functions, including rotation, dupli
 
 For more on the code and how I used JavaFX's 2D centric framework to make 3D modelling go to [this page](https://michael-perdue.github.io/posts/3D-Modelling-Programs-Structure/)
 
-For the source code please visit the [GitHub repository](https://github.com/Michael-Perdue/3D-Modelling).
-
 # Demo of whole system
 
 Here is a video of me making a dice from scratch in the program. The creation of it is sped up by 7x making the total time to make the dice from scratch just under 8 mins with my program:
