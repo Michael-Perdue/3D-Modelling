@@ -1,9 +1,11 @@
 # Demo
-Below is a gif of the program working:
+Below is a low fps gif of the program working:
 
-For a higher fps video than the gif please click the YouTube video below:
+![](https://github.com/Michael-Perdue/Michael-Perdue.github.io/blob/main/assets/3D-Modelling-Demo.gif)
 
-[![Watch the demo](https://img.youtube.com/vi/Ou8jlbjl4M8/default.jpg)](https://youtu.be/Ou8jlbjl4M8)
+For a higher resolution and fps demo than the gif please click below to see a YouTube video of another demo of the program:
+
+[![Demo video](http://img.youtube.com/vi/GmSJv23EQBg/0.jpg)](http://www.youtube.com/watch?v=GmSJv23EQBg)
 
 # 3D-Modelling
 This is the github repo for my 3D modeling program that was made purely in javaFX with no external libraries which which lets you add cuboids and spheres to a blank screen and then you can translate, rotate, duplicate, set the material and more all made with just JavaFX and no other external library.
