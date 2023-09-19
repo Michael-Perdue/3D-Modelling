@@ -51,25 +51,25 @@ To translate on the z axis press ***q*** to decrease z axis position and press *
 
 You must first click the button labeled *'move'* and then to move an object you first need to select it then you can press the corresponding key mentioned above to move it. Multiple objects can be moved at a time and any moved object will stay at the position it is moved to until you change it. You can stop moving by deselecting the object, clicking the *'Move'* button or just stop pressing the key. 
 
-![](https://michael-perdue.github.io/assets/3D-Translating.gif)
+![](https://github.com/Michael-Perdue/Michael-Perdue.github.io/blob/main/assets/3D-Translating.gif)
 
 ### Configuring shapes
 
 To edit a shape via a configuration box over key press you must click the button labeled *'configure'*. Upon clicking the button all the selected shapes will be unselected as you can only configure one shape at a time and then when you click a shape a configuration box will appear. You can edit the rotation, position, dimensions, material and enable/disable the shape being a lightbox. Closing the configuration box will unselect the object.
 
-![](https://michael-perdue.github.io/assets/3D-Configure.gif)
+![](https://github.com/Michael-Perdue/Michael-Perdue.github.io/blob/main/assets/3D-Configure.gif)
 
 ### Duplicating shapes
 
 To duplicate a shape or multiple shapes you must first select them and then click the button labeled *'duplicate'*. Upon clicking the button all the selected shapes will be unselected and a copy of that shape will be selected but that shape will be translated positively by one on the x-axis so it's clear that it's a new shape. This can be done infinitely and for as many selected objects as you want. Everything is copied when duplicating a shape including material and whether its a lightbox or not.
 
-![](https://michael-perdue.github.io/assets/3D-Duplicating.gif)
+![](https://github.com/Michael-Perdue/Michael-Perdue.github.io/blob/main/assets/3D-Duplicating.gif)
 
 ### Deleting shapes
 
 To delete a shape or multiple shapes you must first select them and then click the button labeled *'delete'*. Upon clicking the button all the selected shapes will be unselected and deleted. The deletion also includes the light if the shape is a lightbox.
 
-![](https://michael-perdue.github.io/assets/3D-Deleting.gif)
+![](https://github.com/Michael-Perdue/Michael-Perdue.github.io/blob/main/assets/3D-Deleting.gif)
 
 ## Creating shapes 
 
@@ -78,7 +78,8 @@ To delete a shape or multiple shapes you must first select them and then click t
 To create the cuboid you just need to click the button labeled *'Add Square'* and then fill out a configuration box with the details of the cuboid you want to create. You can create cuboids of any dimension (depth width or height), at any position and rotation. In addition, you can select which material you want from wood, cobble, none (plain white) and a material called lightbox which is a slightly transparent black. Finally, you can make the cuboid a lightbox which means it gives off a light. 
 
 Here is the configuration box that appears when the *'Add Square'* button is clicked.
-![](https://michael-perdue.github.io/assets/3D-Square.png)
+
+![](https://github.com/Michael-Perdue/Michael-Perdue.github.io/blob/main/assets/3D-Square.png)
 
 ### Creating Spheres
 
@@ -86,7 +87,7 @@ To create the sphere you just need to click the button labeled *'Add Sphere'* an
 
 Here is the configuration box that appears when the *'Add Sphere'* button is clicked.
 
-![](https://michael-perdue.github.io/assets/3D-Sphere.png)
+![](https://github.com/Michael-Perdue/Michael-Perdue.github.io/blob/main/assets/3D-Sphere.png)
 
 ## Camera
 
@@ -96,7 +97,7 @@ You can zoom in by scrolling forward with the mouse and zoom out by scroll back 
 
 You can zoom in to see more detail at any point by scrolling forward with the mouse and vice versa to scroll out. If you zoom in too close and you clip into the item then the item will no longer be visible, the same is also true if you zoom out too far then the objects will at some point no longer be visible. 
 
-![](https://michael-perdue.github.io/assets/3D-Zoom.gif)
+![](https://github.com/Michael-Perdue/Michael-Perdue.github.io/blob/main/assets/3D-Zoom.gif)
 
 ### Rotating camera
 
@@ -105,7 +106,7 @@ You must be rotate mode and then just hold right click and move your mouse to ro
 
 To be able to see the model at different angles you can rotate the camera in any direction effectively as if the camera was on the surface of a sphere with the center being the 0,0 by default but you can drag the camera to change this. By default, you are in the rotate mode so you just have to hold right-click and move the mouse about to rotate the screen. Once you no longer want to rotate just stop holding the right click and the angle will stay at whatever position you stop at.
 
-![](https://michael-perdue.github.io/assets/3D-ScrollRotate.gif) 
+![](https://github.com/Michael-Perdue/Michael-Perdue.github.io/blob/main/assets/3D-ScrollRotate.gif) 
 
 ### Dragging camera
 
@@ -113,7 +114,7 @@ You must be drag mode and then just hold right click and move your mouse to drag
 
 While rotating the camera is great to see the model at different angles you might want to move the camera up, down or sideways in case the model looks off-center or you just want to pan around the model. So to enable this I made a drag camera mode, by default when loading the program the camera is in rotate mode but clicking the button labeled *'drag mode'* will switch mode. Then you just have to hold right click like you would with rotate and just move the mouse about to drag the screen. Once you no longer want to drag just stop holding the right click and the position will stay at whatever position you stop at. To leave the mode and go back to rotating you just have to click the same button which will now be titled *'rotate mode'* and it will switch back to rotation mode.
 
-![](https://michael-perdue.github.io/assets/3D-DragReset.gif)
+![](https://github.com/Michael-Perdue/Michael-Perdue.github.io/blob/main/assets/3D-DragReset.gif)
 
 ### Resetting camera
 
@@ -125,25 +126,25 @@ As my program does not have different colored lines for each axis that you can t
 
 You can add lightboxes by adding a new shape and selecting enable on lightbox, configuring an existing shape and enabling the lightbox or by duplicating an existing lightbox.
 
-![](https://michael-perdue.github.io/assets/3D-LightDuplicate.gif)
+![](https://github.com/Michael-Perdue/Michael-Perdue.github.io/blob/main/assets/3D-LightDuplicate.gif)
 
 ### Removing lightboxes
 
 You can remove lightboxes by configuring an existing shape and disabling the lightbox or by selecting an existing lightbox and clicking the button labled *'Delete'*.
 
-![](https://michael-perdue.github.io/assets/3D-LightDelete.gif)
+![](https://github.com/Michael-Perdue/Michael-Perdue.github.io/blob/main/assets/3D-LightDelete.gif)
 
 ### Hiding all lightboxes
 
 You can hide the physical bodies of all lightboxes if you want them to still affect lighting but not be visable by clicking the button labled *'Hide Lights'*. This will also deselect any selected lights. To make the lights phyiscally visable again you need to click the same button which will now be labled *'Show Lights'*.
 
-![](https://michael-perdue.github.io/assets/3D-LightHide.gif)
+![](https://github.com/Michael-Perdue/Michael-Perdue.github.io/blob/main/assets/3D-LightHide.gif)
 
 ### Disabling all lightboxes
 
 You can disable all lightboxes emitting light by clicking the button labled *'Disable Lights'*. To make the lights emit light again you need to click the same button which will now be labled *'Disable Lights'*.
 
-![](https://michael-perdue.github.io/assets/3D-LightEnable.gif)
+![](https://github.com/Michael-Perdue/Michael-Perdue.github.io/blob/main/assets/3D-LightEnable.gif)
 
 **Closing Thoughts:**
 
